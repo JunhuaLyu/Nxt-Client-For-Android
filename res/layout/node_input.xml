@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="20dp"
+    android:gravity="center"
+    android:background="#333"
+    android:orientation="vertical">
+    
+    <TextView android:id="@+id/textview_ip_input" 
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:text="@string/node_ip"
+        android:textColor="#fff"
+        android:textSize="18dp"
+        />
+
+    <EditText android:id="@+id/edittext_ip_input"
+        android:layout_marginTop="10dp"
+        android:layout_width="240dp"
+        android:layout_height="44dp"
+        />
+    
+    <TextView  
+        android:layout_marginTop="10dp"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:text="@string/node_input_msg"
+        android:textColor="#fff"
+        android:textSize="18dp"
+        />
+
+</LinearLayout>

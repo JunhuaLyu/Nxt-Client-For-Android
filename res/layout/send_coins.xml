@@ -1,0 +1,209 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    
+<LinearLayout 
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:background="#ddd"
+    android:orientation="vertical">
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="44dp"
+        android:background="#888"
+        android:gravity="center_vertical"
+        >
+        
+        <View 
+            android:layout_marginLeft="10dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/logo"
+            />
+
+        <TextView android:id="@+id/textview_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/send_nxt"
+            android:textColor="#fff"
+            android:textSize="18dp"
+            />
+        
+    </LinearLayout>
+    
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="#ada"
+        >
+
+        <TextView android:id="@+id/textview_receive_account"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="@string/receive_account"
+            android:textColor="#000"
+            android:textSize="18dp"
+            android:layout_marginTop="4dp"
+            />
+
+        <Button android:id="@+id/btn_choose_des"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:text="@string/choose"
+            android:layout_alignParentRight="true"
+            />
+        
+        <EditText android:id="@+id/edittext_receive_account"
+            android:layout_marginTop="3dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:textSize="16dp"
+            android:layout_below="@+id/textview_receive_account"
+            />
+        
+    </RelativeLayout>
+
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        >
+
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="@string/amount"
+            android:textColor="#000"
+            android:textSize="18dp"
+            android:layout_marginTop="2dp"
+            />
+
+        <EditText android:id="@+id/edittext_amount"
+            android:layout_width="100dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="5dp"
+            android:inputType="number"
+            android:textSize="16dp"
+            android:gravity="right"
+            android:text="0"
+            />
+
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="5dp"
+            android:text="Nxt"
+            android:textColor="#000"
+            android:textSize="18dp"
+            />
+
+        <TextView 
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="44dp"
+            />
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="10dp"
+            android:text="Fee: 1"
+            android:textColor="#000"
+            android:textSize="18dp"
+            />
+
+        
+    </LinearLayout>
+    
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="#daa"
+        >
+
+        <TextView android:id="@+id/textview_send_account"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="@string/send_account"
+            android:textColor="#000"
+            android:textSize="18dp"
+            android:layout_marginTop="4dp"
+            />
+
+        <Button android:id="@+id/btn_choose_src"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:text="@string/choose"
+            android:layout_alignParentRight="true"
+            />
+        
+        <EditText android:id="@+id/edittext_send_account"
+            android:layout_marginTop="3dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:textSize="16dp"
+            android:layout_below="@+id/textview_send_account"
+            />
+
+        <TextView android:id="@+id/textview_secret_input"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/secret_phrase"
+            android:textColor="#000"
+            android:textSize="18dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/edittext_send_account"
+            />
+        
+        <EditText android:id="@+id/edittext_secret_input"
+            android:layout_marginTop="5dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textPassword"
+            android:textSize="16dp"
+            android:layout_below="@+id/textview_secret_input"
+            />
+    
+        <CheckBox
+            android:id="@+id/check_visable"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="#000"
+            android:textSize="14dp"
+            android:text="@string/visable"
+            android:layout_below="@+id/edittext_secret_input" 
+            />
+
+    </RelativeLayout>
+        
+    <Button android:id="@+id/btn_send"
+        android:layout_marginTop="5dp"
+        android:layout_width="160dp"
+        android:layout_height="44dp"
+        android:textSize="16dp"
+        android:text="@string/send"
+        />
+    
+</LinearLayout>
+
+</ScrollView>

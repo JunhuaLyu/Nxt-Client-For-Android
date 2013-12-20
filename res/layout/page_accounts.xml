@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    
+    <org.nextcoin.accounts.AccountListView 
+        android:id="@+id/listview_accounts"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:background="#888" 
+        android:orientation="horizontal">
+        
+        <View 
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/logo"
+            />
+
+        <View 
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            />
+        
+        <Button android:id="@+id/btn_add"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="42dp"
+            android:layout_marginTop="2dp"
+            android:text="@string/add"
+            android:textSize="11dp"
+            />
+
+        <View 
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            />
+        
+        <Button android:id="@+id/btn_create"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="42dp"
+            android:layout_marginTop="2dp"
+            android:text="@string/create"
+            android:textSize="11dp"
+            />
+
+        <View 
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            />
+        
+    </LinearLayout>
+
+</LinearLayout>

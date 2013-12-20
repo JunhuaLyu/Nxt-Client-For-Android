@@ -1,0 +1,109 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <include layout="@layout/node_info" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:background="#dddddd" >
+
+        <TextView
+            android:id="@+id/tab_accounts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:drawableTop="@drawable/accounts"
+            android:text="@string/accounts"
+            android:textColor="#000000"
+            android:textSize="16.0dip" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:background="#888899"
+            />
+
+        <TextView
+            android:id="@+id/tab_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:drawableTop="@drawable/addresses"
+            android:text="@string/addresses"
+            android:textColor="#000000"
+            android:textSize="16.0dip" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:background="#888899"
+            />
+
+        <TextView
+            android:id="@+id/tab_settings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/settings"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:text="@string/settings"
+            android:textColor="#000000"
+            android:textSize="16.0dip" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#dddddd"
+         >
+        
+        <View
+            android:id="@+id/cursor"
+            android:layout_width="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="6dp"
+            android:layout_weight="1.0"
+            android:background="#9999ff" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="6dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="2.0"
+            android:background="#00000000" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:background="#eeeeee"
+        android:layout_weight="1" >
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" >
+        </android.support.v4.view.ViewPager>
+
+    </FrameLayout>
+    
+</LinearLayout>

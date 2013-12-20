@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+    android:gravity="center"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
+    
+	<ImageView android:id="@+id/img_send"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:padding="10dp"
+        android:src="@drawable/receive_nxt"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+		/>
+    
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="0dp"
+        android:layout_weight="1"
+		android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical"
+		android:layout_margin="4dip">
+        
+        <TextView android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FF000000"
+            android:textSize="18dip" />
+        
+		<TextView android:id="@+id/info"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="#FF888888"
+			android:textSize="16dip"
+			/>
+        
+	</LinearLayout>
+
+</LinearLayout>
+

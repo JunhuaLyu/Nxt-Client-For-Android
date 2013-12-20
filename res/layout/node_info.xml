@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/node_info_bar"
+    android:layout_width="fill_parent"
+    android:layout_height="44dp"
+    android:gravity="center"
+    android:background="#888" 
+    android:orientation="horizontal">
+    
+<!--     <TextView -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="44dp" -->
+<!--         android:gravity="center" -->
+<!--         android:text="@string/node" -->
+<!--         android:textColor="#fff" -->
+<!--         android:textSize="15dp" -->
+<!--         android:textStyle="bold" -->
+<!--         android:layout_marginLeft="10dp" -->
+<!--         /> -->
+    <View
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@drawable/node"
+        android:layout_marginLeft="10dp"
+        />
+    
+    <View android:id="@+id/view_state"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/icon_offline"
+        />
+
+    <TextView android:id="@+id/text_node_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/default_ip"
+        android:textColor="#000"
+        />
+    
+    <Button android:id="@+id/btn_change_node"
+        android:layout_width="80dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/change"
+        android:textSize="11dp"
+        />
+
+</LinearLayout>

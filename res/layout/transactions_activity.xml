@@ -1,0 +1,89 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:background="#bbb"
+        >
+        
+        <View 
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/accounts"
+            />
+        
+        <TextView android:id="@+id/textview_account_id"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11614711640397236492"
+            android:textColor="#000"
+            android:textSize="18dp"
+            />
+        
+    </LinearLayout>
+
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:background="#ddd"
+        >
+        
+        <TextView android:id="@+id/textview_account_balance"
+            android:layout_marginLeft="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Balance: 10.0"
+            android:textColor="#333"
+            android:textSize="18dp"
+            />
+        
+        <Button android:id="@+id/btn_send"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/send"
+            android:textSize="16dp"
+            />
+
+    </LinearLayout>
+        
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/transactions"
+        android:textColor="#444"
+        android:textSize="16dp"
+        />
+    
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/in_development"
+        android:textColor="#444"
+        android:textSize="20dp"
+        />
+
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:background="#888" 
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+</LinearLayout>
