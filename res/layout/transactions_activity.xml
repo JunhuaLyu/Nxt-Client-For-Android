@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#fff"
+    android:background="#bbb"
     android:orientation="vertical">
     
     <LinearLayout 
@@ -34,7 +34,7 @@
         android:layout_width="fill_parent"
         android:layout_height="48dp"
         android:gravity="center_vertical"
-        android:background="#ddd"
+        android:background="#efe"
         >
         
         <TextView android:id="@+id/textview_account_balance"
@@ -59,31 +59,22 @@
     </LinearLayout>
         
     <TextView 
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
         android:text="@string/transactions"
         android:textColor="#444"
         android:textSize="16dp"
         />
     
-    <TextView 
+    <org.nextcoin.transactions.TransactionListView 
+        android:id="@+id/listview_transaction"
+        android:background="#fff"
+        android:layout_margin="10dp"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:text="@string/in_development"
-        android:textColor="#444"
-        android:textSize="20dp"
         />
-
-    <LinearLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="48dp"
-        android:gravity="center_vertical"
-        android:background="#888" 
-        android:orientation="horizontal">
-
-    </LinearLayout>
 
 </LinearLayout>

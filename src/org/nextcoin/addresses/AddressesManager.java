@@ -21,6 +21,18 @@ public class AddressesManager {
         return mAccountList;
     }
     
+    public String getTag(String accountID){
+        if ( null != mAccountList && mAccountList.size() > 0 ){
+            for ( Account acc : mAccountList ){
+                if ( accountID.equals(acc.mId) ){
+                    if ( null != acc.mTag && !acc.mTag.equals("null") )
+                        return acc.mTag;
+                }
+            }
+        }
+        return " ";
+    }
+    
     public void addAccount(Context context, String id, String tag){
         if ( null == tag )
             tag = "null";
@@ -75,16 +87,20 @@ public class AddressesManager {
         }
     }
 
-    private void saveAccountList(Context context){
+    public void saveAccountList(Context context){
         if ( null != mAccountList && mAccountList.size() >= 0 ){
             StringBuffer strbuff = new StringBuffer();
             strbuff.append("{\"AccountList\":[");
-            for ( Account acct : mAccountList ){
+            for ( int i = 0; i < mAccountList.size(); ++ i ){
+                Account acct = mAccountList.get(i);
                 strbuff.append("{\"ID\":\"");
                 strbuff.append(acct.mId);
                 strbuff.append("\", \"TAG\":\"");
                 strbuff.append(acct.mTag);
-                strbuff.append("\"},");
+                if ( i == mAccountList.size() - 1 )
+                    strbuff.append("\"}");
+                else
+                    strbuff.append("\"},");
             }
             strbuff.append("]}");
             

@@ -78,10 +78,15 @@ public class NodesManager {
         if ( null != mNodeIPList && mNodeIPList.size() > 0 ){
             StringBuffer strbuff = new StringBuffer();
             strbuff.append("{\"NodeList\":[");
-            for ( String ipStr : mNodeIPList ){
+            
+            for ( int i = 0; i < mNodeIPList.size(); ++ i ){
+                String ipStr = mNodeIPList.get(i);
                 strbuff.append("{\"IP\":\"");
                 strbuff.append(ipStr);
-                strbuff.append("\"},");
+                if ( i == mNodeIPList.size() - 1 )
+                    strbuff.append("\"}");
+                else
+                    strbuff.append("\"},");
             }
             strbuff.append("]}");
             

@@ -74,16 +74,21 @@ public class AccountsManager {
         }
     }
 
-    private void saveAccountList(Context context){
+    public void saveAccountList(Context context){
         if ( null != mAccountList && mAccountList.size() >= 0 ){
             StringBuffer strbuff = new StringBuffer();
             strbuff.append("{\"AccountList\":[");
-            for ( Account acct : mAccountList ){
+            
+            for ( int i = 0; i < mAccountList.size(); ++ i ){
+                Account acct = mAccountList.get(i);
                 strbuff.append("{\"ID\":\"");
                 strbuff.append(acct.mId);
                 strbuff.append("\", \"TAG\":\"");
                 strbuff.append(acct.mTag);
-                strbuff.append("\"},");
+                if ( i == mAccountList.size() - 1 )
+                    strbuff.append("\"}");
+                else
+                    strbuff.append("\"},");
             }
             strbuff.append("]}");
             

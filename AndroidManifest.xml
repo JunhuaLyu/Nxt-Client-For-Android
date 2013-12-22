@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.nextcoin.nxtclient"
-    android:versionCode="200"
-    android:versionName="0.2.0" >
+    android:versionCode="300"
+    android:versionName="0.3.0" >
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -19,6 +19,7 @@
         <activity
             android:name=".MainActivity"
             android:theme="@android:style/Theme.NoTitleBar"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,16 +30,19 @@
         
         <activity
             android:name="org.nextcoin.transactions.TransactionsActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
         </activity>
 
         <activity
             android:name="org.nextcoin.transactions.SendCoinsActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
         </activity>
 
         <activity
             android:name="org.nextcoin.accounts.AccountCreateActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         

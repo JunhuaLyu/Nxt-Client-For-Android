@@ -23,10 +23,29 @@ import org.nextcoin.node.NodesManager;
 public class SendCoin {
 // https://localhost:7875/nxt?requestType=sendMoney
 //&secretPhrase=%s&recipient=%s&amount=%s&fee=1&deadline=900
+    static private class SendRunnale implements Runnable{
+        String mSecret;
+        String mRecipient;
+        float mAmount;
+        ResponseListener mListener;
+        public SendRunnale(String secret, String recipient, float amount, ResponseListener listener){
+            mSecret = secret;
+            mRecipient = recipient;
+            mAmount = amount;
+            mListener = listener;
+        }
+        
+        @Override
+        public void run() {
+            SendCoin sender = new SendCoin(mListener);
+            sender.sendHttps(mSecret, mRecipient, mAmount);
+        }
+    }
+
     static public void sendCoin(String secret, String recipient, float amount, ResponseListener listener){
-        SendCoin sender = new SendCoin(listener);
+        //SendCoin sender = new SendCoin(mListener);
         //sender.send(secret, recipient, amount);
-        sender.sendHttps(secret, recipient, amount);
+        new Thread(new SendRunnale(secret, recipient, amount, listener)).start();
     }
 
     public interface ResponseListener{

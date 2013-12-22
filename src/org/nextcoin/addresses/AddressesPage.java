@@ -42,13 +42,14 @@ public class AddressesPage {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAccountInputDialog();
+                openAccountInputDialog(false, 0);
             }
         });
         
-        mItemOptions = new CharSequence[2];
+        mItemOptions = new CharSequence[3];
         mItemOptions[0] = mContext.getText(R.string.send_nxt);
-        mItemOptions[1] = mContext.getText(R.string.remove);
+        mItemOptions[1] = mContext.getText(R.string.edit);
+        mItemOptions[2] = mContext.getText(R.string.remove);
         
         LayoutInflater inflater = LayoutInflater.from(mContext);
         mAccountInputView = inflater.inflate(R.layout.account_input, null);
@@ -76,10 +77,12 @@ public class AddressesPage {
         .setTitle(accountList.get(pos).mId)
         .setItems(mItemOptions, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if ( 1 == which ){
+                if ( 2 == which ){
                     AddressesManager.sharedInstance().removeAccount(mContext, mCurrentItemPos);
                     LinkedList<Account> accList = AddressesManager.sharedInstance().getAccountList();
                     mAddressesListView.setAccountList(accList);
+                }else if ( 1 == which ){
+                    openAccountInputDialog(true, mCurrentItemPos);
                 }else if ( 0 == which ){
                     sendNxt(mCurrentItemPos);
                 }
@@ -92,9 +95,20 @@ public class AddressesPage {
     private AlertDialog mAccountInputDialog;
     private EditText mEditTextId;
     private EditText mEditTextTag;
-    private void openAccountInputDialog(){
-        mEditTextId.setText("");
-        mEditTextTag.setText("");
+    private boolean mIsEdit;
+    private Account mEditAccount;
+    private void openAccountInputDialog(boolean isEdit, int pos){
+        mIsEdit = isEdit;
+        
+        if ( mIsEdit ){
+            mEditAccount = AddressesManager.sharedInstance().getAccountList().get(pos);
+            mEditTextId.setText(mEditAccount.mId);
+            mEditTextTag.setText(mEditAccount.mTag);
+        }else{
+            mEditTextId.setText("");
+            mEditTextTag.setText("");
+        }
+        
         
         if ( null == mAccountInputDialog ){
             mAccountInputDialog = new AlertDialog.Builder(mContext)
@@ -111,10 +125,17 @@ public class AddressesPage {
                     if ( tag.length() <= 0 )
                         tag = "null";
                     
-                    AddressesManager.sharedInstance().addAccount(
-                            mAddressesPage.getContext(), accid, tag);
-                    mAddressesListView.setAccountList(
-                            AddressesManager.sharedInstance().getAccountList());
+                    if ( mIsEdit ){
+                        mEditAccount.mId = accid;
+                        mEditAccount.mTag = tag;
+                        AddressesManager.sharedInstance().saveAccountList(mContext);
+                        mAddressesListView.notifyDataSetInvalidated();
+                    }else{
+                        AddressesManager.sharedInstance().addAccount(
+                                mContext, accid, tag);
+                        mAddressesListView.setAccountList(
+                                AddressesManager.sharedInstance().getAccountList());
+                    }
                 }})
             .setNegativeButton(R.string.back, null)
             .create();

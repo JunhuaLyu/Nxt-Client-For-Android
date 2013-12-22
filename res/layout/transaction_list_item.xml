@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+    android:gravity="center"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
+    
+	<ImageView android:id="@+id/img"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:padding="14dp"
+        android:src="@drawable/send_nxt"
+		/>
+    
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="0dp"
+        android:layout_weight="1"
+		android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical"
+		android:layout_margin="4dip">
+        
+        <LinearLayout android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView android:id="@+id/tag"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text=" "
+                android:textColor="#66f"
+                android:textSize="18dip"
+                />
+
+            <TextView android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:drawableLeft="@drawable/dollar"
+                android:text="1000.0"
+                android:textColor="#FF888888"
+                android:textSize="16dip" />
+
+            <TextView android:id="@+id/fee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:drawableLeft="@drawable/cut"
+                android:text="1.0"
+                android:textColor="#FF888888"
+                android:textSize="16dip" />
+
+            <TextView android:id="@+id/confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:drawableLeft="@drawable/confirm"
+                android:text="10+"
+                android:textColor="#FF888888"
+                android:textSize="16dip" />
+            
+        </LinearLayout>
+        
+		<TextView android:id="@+id/related_account"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+            android:text="12345678901234567890"
+			android:textColor="#FF000000"
+			android:textSize="18dip"
+			/>
+        
+	</LinearLayout>
+
+</LinearLayout>
+

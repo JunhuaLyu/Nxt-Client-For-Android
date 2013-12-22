@@ -21,6 +21,7 @@
     <string name="address_list_empty_msg">List is empty, press the button below to add account.</string>
     
     <string name="transactions">Transactions</string>
+    <string name="edit">Edit</string>
     <string name="remove">Remove</string>
 
     <string name="account_id">Account id</string>
@@ -37,6 +38,7 @@
     <string name="ip_format_error">IP address format error!</string>
     
     <string name="send">Send</string>
+    <string name="waiting">Waiting....</string>
     <string name="send_nxt">Send Nxt</string>
     
     <string name="create_account">Create account</string>
@@ -54,5 +56,6 @@
     <string name="success">Success</string>
     <string name="failed">Failed</string>
     <string name="select_account">Select account</string>
+    <string name="save_to_address">Save to address book</string>
     
 </resources>

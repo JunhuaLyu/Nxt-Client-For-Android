@@ -12,6 +12,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.View;
@@ -34,7 +36,7 @@ public class SendCoinsActivity extends Activity {
     private EditText mEditTextSend;
     private EditText mEditTextReceive;
     private EditText mEditTextAmount;
-
+    private Button mBtnSend;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +67,8 @@ public class SendCoinsActivity extends Activity {
                 }
             }});
         
-        Button btnSend = (Button)this.findViewById(R.id.btn_send);
-        btnSend.setOnClickListener(new View.OnClickListener() {
+        mBtnSend = (Button)this.findViewById(R.id.btn_send);
+        mBtnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //String src = mEditTextSend.getText().toString();
@@ -77,6 +79,8 @@ public class SendCoinsActivity extends Activity {
                     return;
                 
                 SendCoin.sendCoin(secret, recipient, amount, mResponseListener);
+                mBtnSend.setText(R.string.waiting);
+                mBtnSend.setEnabled(false);
             }
         });
         
@@ -113,15 +117,43 @@ public class SendCoinsActivity extends Activity {
     private SendCoin.ResponseListener mResponseListener = new SendCoin.ResponseListener() {
         @Override
         public void onResponse(boolean success, String info) {
-            if ( success ){
-                Toast.makeText(SendCoinsActivity.this,
-                        SendCoinsActivity.this.getText(R.string.success),
-                        Toast.LENGTH_LONG).show();
-                finish();
-            }else{
-                if ( null == info )
-                    info = (String) SendCoinsActivity.this.getText(R.string.failed);
-                Toast.makeText(SendCoinsActivity.this, info, Toast.LENGTH_LONG).show();
+            Message msg = new Message();
+            msg.obj = SendCoinsActivity.this;
+            if ( success )
+                msg.what = MSG_SEND_SUCCESS;
+            else
+                msg.what = MSG_SEND_FAILED;
+            mHandler.sendMessage(msg);
+        }
+    };
+    
+    /**
+     * handle msg to update UI
+     * @param msg
+     */
+    private static final int MSG_SEND_SUCCESS = 0;
+    private static final int MSG_SEND_FAILED = 1;
+    public void handleMessage(Message msg) {
+        mBtnSend.setText(R.string.send);
+        mBtnSend.setEnabled(true);
+
+        if ( MSG_SEND_SUCCESS == msg.what ){
+            Toast.makeText(SendCoinsActivity.this,
+                    SendCoinsActivity.this.getText(R.string.success),
+                    Toast.LENGTH_LONG).show();
+            finish();
+        }else{
+            Toast.makeText(SendCoinsActivity.this, R.string.failed, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    static private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if ( msg.obj instanceof SendCoinsActivity ){
+                SendCoinsActivity instance = (SendCoinsActivity)msg.obj;
+                instance.handleMessage(msg);
             }
         }
     };

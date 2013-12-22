@@ -45,7 +45,7 @@ public class AccountPage {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAccountInputDialog();
+                openAccountInputDialog(false, 0);
             }
         });
         
@@ -57,10 +57,11 @@ public class AccountPage {
             }
         });
         
-        mItemOptions = new CharSequence[2];
+        mItemOptions = new CharSequence[3];
         mItemOptions[0] = mContext.getText(R.string.transactions);
-        mItemOptions[1] = mContext.getText(R.string.remove);
-        
+        mItemOptions[1] = mContext.getText(R.string.edit);
+        mItemOptions[2] = mContext.getText(R.string.remove);
+
         LayoutInflater inflater = LayoutInflater.from(mContext);
         mAccountInputView = inflater.inflate(R.layout.account_input, null);
         mEditTextId = (EditText)mAccountInputView.findViewById(R.id.edittext_accid_input);
@@ -95,10 +96,12 @@ public class AccountPage {
         .setTitle(accountList.get(pos).mId)
         .setItems(mItemOptions, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if ( 1 == which ){
+                if ( 2 == which ){
                     AccountsManager.sharedInstance().removeAccount(mContext, mCurrentItemPos);
                     LinkedList<Account> accList = AccountsManager.sharedInstance().getAccountList();
                     mAccountListView.setAccountList(accList);
+                }else if ( 1 == which ){
+                    openAccountInputDialog(true, mCurrentItemPos);
                 }else if ( 0 == which ){
                     TransactionsActivity.open(mContext, mCurrentItemPos);
                 }
@@ -111,9 +114,19 @@ public class AccountPage {
     private AlertDialog mAccountInputDialog;
     private EditText mEditTextId;
     private EditText mEditTextTag;
-    private void openAccountInputDialog(){
-        mEditTextId.setText("");
-        mEditTextTag.setText("");
+    private boolean mIsEdit;
+    private Account mEditAccount;
+    private void openAccountInputDialog(boolean isEdit, int pos){
+        mIsEdit = isEdit;
+        
+        if ( mIsEdit ){
+            mEditAccount = AccountsManager.sharedInstance().getAccountList().get(pos);
+            mEditTextId.setText(mEditAccount.mId);
+            mEditTextTag.setText(mEditAccount.mTag);
+        }else{
+            mEditTextId.setText("");
+            mEditTextTag.setText("");
+        }
         
         if ( null == mAccountInputDialog ){
             mAccountInputDialog = new AlertDialog.Builder(mContext)
@@ -130,11 +143,18 @@ public class AccountPage {
                     if ( tag.length() <= 0 )
                         tag = "null";
                     
-                    AccountsManager.sharedInstance().addAccount(
-                            mAccountsPage.getContext(), accid, tag);
-                    mAccountListView.setAccountList(
-                            AccountsManager.sharedInstance().getAccountList());
-                    update(AccountsManager.sharedInstance().getAccountList().getLast());
+                    if ( mIsEdit ){
+                        mEditAccount.mId = accid;
+                        mEditAccount.mTag = tag;
+                        AccountsManager.sharedInstance().saveAccountList(mAccountsPage.getContext());
+                        mAccountListView.notifyDataSetInvalidated();
+                    }else{
+                        AccountsManager.sharedInstance().addAccount(
+                                mAccountsPage.getContext(), accid, tag);
+                        mAccountListView.setAccountList(
+                                AccountsManager.sharedInstance().getAccountList());
+                        update(AccountsManager.sharedInstance().getAccountList().getLast());
+                    }
                 }})
             .setNegativeButton(R.string.back, null)
             .create();

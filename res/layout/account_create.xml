@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
+    android:background="#ddd"
     android:layout_height="fill_parent"
     >
 
@@ -8,7 +9,6 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:background="#ddd"
     android:orientation="vertical">
     
     <LinearLayout 
