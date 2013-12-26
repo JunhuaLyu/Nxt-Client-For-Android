@@ -57,5 +57,15 @@
     <string name="failed">Failed</string>
     <string name="select_account">Select account</string>
     <string name="save_to_address">Save to address book</string>
+    <string name="aliases">Aliases</string>
+    <string name="alias">Alias</string>
+    <string name="aliases_list_title">Aliases registered by this account:</string>
+
+    <string name="add_by_alias">Add by alias</string>
+    <string name="add_by_number">Add by account id</string>
+
+    <string name="alias_failed">Get alias faild!</string>
+    <string name="alias_not_exist">Alias not exist!</string>
+    <string name="alias_no_acc">Url is not a account id!</string>
     
 </resources>

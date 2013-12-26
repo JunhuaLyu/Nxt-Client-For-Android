@@ -31,6 +31,13 @@ public class TransactionsActivity extends Activity {
                 for ( Transaction transaction : account.mTransactionList ){
                     Transaction.loadTransaction(transaction);
                 }
+                LinkedList<Transaction> listType0 = new LinkedList<Transaction>();
+                for ( Transaction transaction : account.mTransactionList ){
+                    if ( 0 == transaction.mType )
+                        listType0.add(transaction);
+                }
+                
+                account.mTransactionList = listType0;
                 Transaction.sortByTimestamp(account.mTransactionList);
                 mTransactionListView.setTransactionList(account.mTransactionList);
                 mTransactionListView.notifyDataSetChanged();

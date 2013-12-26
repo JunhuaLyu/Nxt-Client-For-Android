@@ -3,17 +3,22 @@ package org.nextcoin.addresses;
 import java.util.LinkedList;
 
 import org.nextcoin.accounts.Account;
+import org.nextcoin.alias.Alias;
+import org.nextcoin.alias.AliasInputDialog;
 import org.nextcoin.nxtclient.R;
 import org.nextcoin.transactions.SendCoinsActivity;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class AddressesPage {
     private Context mContext;
@@ -42,7 +47,7 @@ public class AddressesPage {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAccountInputDialog(false, 0);
+                openInputTypeSelectDialog();
             }
         });
         
@@ -91,6 +96,51 @@ public class AddressesPage {
         .show();
     }
     
+    private void openInputTypeSelectDialog(){
+        CharSequence options[] = new CharSequence[2];
+        options[0] = mContext.getText(R.string.add_by_alias);
+        options[1] = mContext.getText(R.string.add_by_number);
+        
+        new AlertDialog.Builder(mContext)
+        .setTitle(R.string.add_account)
+        .setItems(options, new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                if ( 1  == arg1 )
+                    openAccountInputDialog(false, 0);
+                else
+                    openAliasInputDialog();
+            }})
+        .setNegativeButton(R.string.back, null)
+        .show();
+    }
+
+    private void openAliasInputDialog(){
+        new AliasInputDialog().open(mContext, new Alias.AliasResponse() {
+            @Override
+            public void onResult(int result, Alias alias) {
+                if ( Alias.RESULT_SUCCESS == result ){
+                    AddressesManager.sharedInstance().addAccount(
+                            mContext, alias.mAccountId, alias.mName);
+                    mAddressesListView.setAccountList(
+                            AddressesManager.sharedInstance().getAccountList());
+                    
+                }else{
+                    Message msg = new Message();
+                    msg.obj = AddressesPage.this;
+                    msg.what = MSG_ERROR_INFO;
+                    if ( Alias.RESULT_NOT_EXIST == result )
+                        msg.arg1 = R.string.alias_not_exist;
+                    else if ( Alias.RESULT_NO_ACC == result )
+                        msg.arg1 = R.string.alias_no_acc;
+                    else
+                        msg.arg1 = R.string.alias_failed;
+                    mHandler.sendMessage(msg);
+                }
+            }
+        });
+    }
+
     private View mAccountInputView;
     private AlertDialog mAccountInputDialog;
     private EditText mEditTextId;
@@ -99,7 +149,7 @@ public class AddressesPage {
     private Account mEditAccount;
     private void openAccountInputDialog(boolean isEdit, int pos){
         mIsEdit = isEdit;
-        
+
         if ( mIsEdit ){
             mEditAccount = AddressesManager.sharedInstance().getAccountList().get(pos);
             mEditTextId.setText(mEditAccount.mId);
@@ -108,8 +158,7 @@ public class AddressesPage {
             mEditTextId.setText("");
             mEditTextTag.setText("");
         }
-        
-        
+
         if ( null == mAccountInputDialog ){
             mAccountInputDialog = new AlertDialog.Builder(mContext)
             .setTitle(R.string.add)
@@ -142,6 +191,27 @@ public class AddressesPage {
         }
         mAccountInputDialog.show();
     }
+    
+    /**
+     * handle msg to update UI
+     * @param msg
+     */
+    private static final int MSG_ERROR_INFO = 0;
+    public void handleMessage(Message msg) {
+        if ( MSG_ERROR_INFO == msg.what )
+            Toast.makeText(mContext, msg.arg1, Toast.LENGTH_LONG).show();
+    }
+
+    static private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if ( msg.obj instanceof AddressesPage ){
+                AddressesPage instance = (AddressesPage)msg.obj;
+                instance.handleMessage(msg);
+            }
+        }
+    };
     
     public void update(){
     }

@@ -24,7 +24,7 @@ public class AddressesManager {
     public String getTag(String accountID){
         if ( null != mAccountList && mAccountList.size() > 0 ){
             for ( Account acc : mAccountList ){
-                if ( accountID.equals(acc.mId) ){
+                if ( acc.mId.equals(accountID) ){
                     if ( null != acc.mTag && !acc.mTag.equals("null") )
                         return acc.mTag;
                 }

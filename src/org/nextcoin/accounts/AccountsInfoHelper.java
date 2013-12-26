@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.nextcoin.alias.Alias;
 import org.nextcoin.node.NodeContext;
 import org.nextcoin.node.NodesManager;
 import org.nextcoin.transactions.Transaction;
@@ -157,6 +158,67 @@ public class AccountsInfoHelper {
             @Override
             public void onFailure(Throwable error, String content) {
                 mTransactionResponse.onResponse(false, mTransactionAccount, null);
+            }
+        });
+    }
+    
+    //
+    //  request aliases list
+    // 
+    private ResponseListener mAliasResponseListener;
+    public void requestAliasList(Account account, ResponseListener listener){
+        mAliasResponseListener = listener;
+        NodeContext nodeContext = NodesManager.sharedInstance().getCurrentNode();
+        String ip = null;
+        if ( nodeContext.isActive() )
+            ip = nodeContext.getIP();
+        
+        getAliasList(ip, account, mAliasResponseListener);
+    }
+
+    private ResponseListener mAliasResponse;
+    private Account mAliasAccount;
+    private void getAliasList(String ip, Account account, ResponseListener listener){
+        mAliasResponse = listener;
+        mAliasAccount = account;
+        if ( null == ip )
+            mAliasResponse.onResponse(false, account, null);
+
+        String base_url = "http://" + ip + ":7874";
+        String httpUrl = String.format(
+                "%s/nxt?requestType=listAccountAliases&account=%s", 
+                base_url, mAliasAccount.mId);
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(httpUrl, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(String response) {
+                String strResult = response;
+                JSONObject jsonObj;
+                try {
+                    jsonObj = new JSONObject(strResult);
+                    JSONArray jarray = jsonObj.getJSONArray("aliases");
+
+                    mAliasAccount.mAliasList = new LinkedList<Alias>();
+                    for ( int i = 0; i < jarray.length(); ++ i ){
+                        JSONObject  jso = jarray.getJSONObject(i);
+                        Alias alias = new Alias();
+                        alias.mName = jso.getString("alias");
+                        alias.mUrl = jso.getString("uri");
+                        mAliasAccount.mAliasList.add(alias);
+                    }
+                    mAliasResponse.onResponse(true, mAliasAccount, null);
+                    return;
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                
+                mAliasResponse.onResponse(false, mAliasAccount, null);
+            }
+
+            @Override
+            public void onFailure(Throwable error, String content) {
+                mAliasResponse.onResponse(false, mAliasAccount, null);
             }
         });
     }
