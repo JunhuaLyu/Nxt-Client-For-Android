@@ -23,7 +23,7 @@
             android:drawableTop="@drawable/accounts"
             android:text="@string/accounts"
             android:textColor="#000000"
-            android:textSize="16.0dip" />
+            android:textSize="14.0dip" />
 
         <View
             android:layout_width="2dp"
@@ -33,6 +33,25 @@
             android:background="#888899"
             />
 
+        <TextView
+            android:id="@+id/tab_news"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:drawableTop="@drawable/news"
+            android:text="@string/news"
+            android:textColor="#000000"
+            android:textSize="14.0dip" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:background="#888899"
+            />
+        
         <TextView
             android:id="@+id/tab_address"
             android:layout_width="0dp"
@@ -42,7 +61,7 @@
             android:drawableTop="@drawable/addresses"
             android:text="@string/addresses"
             android:textColor="#000000"
-            android:textSize="16.0dip" />
+            android:textSize="14.0dip" />
 
         <View
             android:layout_width="2dp"
@@ -53,15 +72,15 @@
             />
 
         <TextView
-            android:id="@+id/tab_settings"
+            android:id="@+id/tab_tools"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableTop="@drawable/settings"
+            android:drawableTop="@drawable/tools"
             android:layout_weight="1.0"
             android:gravity="center"
-            android:text="@string/settings"
+            android:text="@string/tools"
             android:textColor="#000000"
-            android:textSize="16.0dip" />
+            android:textSize="14.0dip" />
         
     </LinearLayout>
     
@@ -86,7 +105,7 @@
             android:layout_height="6dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_weight="2.0"
+            android:layout_weight="3.0"
             android:background="#00000000" />
 
     </LinearLayout>
@@ -106,4 +125,5 @@
 
     </FrameLayout>
     
+    <include layout="@layout/nxt_price_bar" />
 </LinearLayout>

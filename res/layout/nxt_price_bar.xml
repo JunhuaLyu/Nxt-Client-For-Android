@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+    android:id="@+id/price_bar"
+    android:gravity="center"
+    android:background="#000"
+	android:layout_width="fill_parent"
+	android:layout_height="30dp">
+    
+    <TextView android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="dgex.com"
+        android:textColor="#ff0"
+        android:textSize="16dip" />
+
+    <TextView android:id="@+id/price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="0.0000701 BTC"
+        android:textColor="#fff"
+        android:textSize="14dip" />
+
+    <ImageView android:id="@+id/img"
+        android:layout_width="16dip"
+        android:layout_height="16dip"
+        android:src="@drawable/up"
+        />
+
+    <TextView android:id="@+id/change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:text="+23.3%"
+        android:textColor="#0f0"
+        android:textSize="14dip" />
+    
+</LinearLayout>
+

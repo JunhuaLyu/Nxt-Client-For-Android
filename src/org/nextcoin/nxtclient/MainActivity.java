@@ -4,6 +4,8 @@ import org.nextcoin.accounts.AccountsManager;
 import org.nextcoin.addresses.AddressesManager;
 import org.nextcoin.node.NodeContext;
 import org.nextcoin.node.NodesManager;
+import org.nextcoin.pricetracker.PriceBar;
+import org.nextcoin.pricetracker.PriceTracker;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -119,32 +121,77 @@ public class MainActivity extends Activity {
     };
 
     static final private int MSG_NODE_UPDATE = 0;
+    static final private int MSG_PRICE_UPDATE = 1;
     public void handleMessage(Message msg) {
         switch (msg.what){
             case MSG_NODE_UPDATE:
                 nodeInfoBarUpdateResponse();
                 mMainFunctionPage.update();
                 break;
+            case MSG_PRICE_UPDATE:
+                mPriceBar.setPrice((float)mPriceTracker.mNewPrice, (float)mPriceTracker.mOldPrice);
+                break;
             default:
                 break;
         }
     }
     
+    private PriceTracker mPriceTracker;
+    private PriceBar mPriceBar;
     @Override
     public void onCreate(Bundle savedInstanceState) {
+//        Resources resources = getResources();  
+//        Configuration config = resources.getConfiguration();  
+//        DisplayMetrics dm = resources.getDisplayMetrics();  
+//        config.locale = Locale.ENGLISH;
+//        resources.updateConfiguration(config, dm); 
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
         AccountsManager.sharedInstance().init(this);
         AddressesManager.sharedInstance().init(this);
         NodesManager.sharedInstance().init(this);
         mNodeContext = NodesManager.sharedInstance().getCurrentNode();
         nodeInfoBarInit();
         mMainFunctionPage = new MainFunctionPage(this);
+        
+        mPriceTracker = new PriceTracker();
+        mPriceTracker.setPriceReciever(new PriceTracker.PriceReciever() {
+            @Override
+            public void onPriceUpdate(PriceTracker priceTracker) {
+                Message msg = new Message();
+                msg.what = MSG_PRICE_UPDATE;
+                msg.obj = MainActivity.this;
+                mMessageHandler.sendMessage(msg);
+            }
+        });
+
+        View priceBar = this.findViewById(R.id.price_bar);
+        mPriceBar = new PriceBar(priceBar);
+        Settings.sharedInstance().registerSettingsChangeListener(mSettingsChangeListener);
+
+        if ( !Settings.sharedInstance().isShowingPrice(this) )
+            priceBar.setVisibility(View.GONE);
     }
+    
+    private Settings.SettingsChangeListener mSettingsChangeListener = new Settings.SettingsChangeListener(){
+        @Override
+        public void onChange(Settings settings) {
+            if ( Settings.sharedInstance().isShowingPrice(MainActivity.this) ){
+                mPriceBar.show();
+                mPriceTracker.start();
+            }
+            else{
+                mPriceBar.hide();
+                mPriceTracker.stop();
+            }
+        }};
     
     @Override
     public void onDestroy(){
         super.onDestroy();
+        Settings.sharedInstance().unregisterSettingsChangeListener(mSettingsChangeListener);
         NodesManager.sharedInstance().release(this);
         AccountsManager.sharedInstance().release(this);
         AddressesManager.sharedInstance().release(this);
@@ -156,8 +203,17 @@ public class MainActivity extends Activity {
         super.onResume();
         nodeInfoBarUpdate();
         mMainFunctionPage.update();
+        if ( Settings.sharedInstance().isShowingPrice(this) ){
+            mPriceTracker.start();
+        }
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        mPriceTracker.stop();
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //getMenuInflater().inflate(R.menu.activity_main, menu);

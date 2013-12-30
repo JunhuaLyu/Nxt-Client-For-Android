@@ -1,0 +1,77 @@
+<resources>
+
+    <string name="app_name">Nxt客户端</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">NxtClient</string>
+
+    <string name="change">切换</string>
+    <string name="change_node">切换节点</string>
+    <string name="node">切换</string>
+    <string name="default_ip">0.0.0.0</string>
+    
+    <string name="accounts">账户</string>
+    <string name="addresses">地址簿</string>
+    <string name="settings">设置</string>
+    <string name="tools">工具箱</string>
+    
+    <string name="add">添加</string>
+    <string name="add_account">添加账户</string>
+    <string name="create">创建</string>
+    <string name="account_list_empty_msg">列表为空, 你可以添加账户或者创建一个新账户.</string>
+    <string name="address_list_empty_msg">列表为空</string>
+    
+    <string name="transactions">交易记录</string>
+    <string name="edit">编辑</string>
+    <string name="remove">移除</string>
+
+    <string name="account_id">账户号</string>
+    <string name="account_tag">账户名称(可选)</string>
+
+    <string name="confirm">确认</string>
+    <string name="back">返回</string>
+    
+    <string name="in_development">开发中....</string>
+    <string name="unlock">解锁账户</string>
+    <string name="unlock_msg">解锁账户还没开放.</string>
+    <string name="node_ip">节点IP</string>
+    <string name="node_input_msg">默认节点 121.199.12.227 用于测试. 你应该切换到你自己的节点</string>
+    <string name="ip_format_error">IP 地址格式错误!</string>
+    
+    <string name="send">发送</string>
+    <string name="waiting">等待中....</string>
+    <string name="send_nxt">发送Nxt</string>
+    
+    <string name="create_account">创建账户</string>
+    <string name="secret_phrase">密码</string>
+    <string name="secret_phrase_tips">密码长度超过30才比较安全</string>
+    <string name="secret_phrase_refuse">你需要输入30字以上! 否则容易被破解.</string>
+    <string name="secret_phrase_warning">警告: 你如果忘记了密码，你将永远失去这个账号.</string>
+    <string name="visable">密码可见</string>
+    
+    <string name="send_account">我的账户</string>
+    <string name="receive_account">接收账户</string>
+    <string name="choose">选择</string>
+    <string name="amount">数量</string>
+    
+    <string name="success">成功</string>
+    <string name="failed">失败</string>
+    <string name="select_account">选择账户</string>
+    <string name="save_to_address">保存到地址簿</string>
+    <string name="aliases">别名</string>
+    <string name="alias">别名</string>
+    <string name="aliases_list_title">该账户注册的别名:</string>
+
+    <string name="add_by_alias">通过别名添加</string>
+    <string name="add_by_number">通过账户号添加</string>
+
+    <string name="alias_failed">获取别名失败!</string>
+    <string name="alias_not_exist">该别名不存在!</string>
+    <string name="alias_no_acc">该别名的Url没有填写账户号!</string>
+    
+    <string name="show_price">显示实时价格</string>
+    <string name="nxt_price">Nxt价格</string>
+    <string name="news">新闻</string>
+    <string name="news_title">NXT新闻  http://info.nxtcrypto.org/</string>
+
+</resources>

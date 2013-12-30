@@ -39,7 +39,9 @@ public class Alias {
                     if ( jsonObj.has("uri") ){
                         mUrl = jsonObj.getString("uri");
                         String content = mUrl.toLowerCase();
-                        if ( content.startsWith("nxt:") )
+                        if ( content.startsWith("nacc:") )
+                            content = content.substring(5);
+                        else if ( content.startsWith("nxt:") )
                             content = content.substring(4);
                         
                         if (content.length() < 22 && content.matches("\\d+")){

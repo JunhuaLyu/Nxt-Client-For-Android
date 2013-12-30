@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.nextcoin.accounts.AccountPage;
 import org.nextcoin.addresses.AddressesPage;
+import org.nextcoin.news.NewsPage;
 
 import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
@@ -20,8 +21,9 @@ import android.widget.TextView;
 
 public class MainFunctionPage {
     private static final int TAB_ID_ACCOUNTS = 0;
-    private static final int TAB_ID_ADDRESSES = 1;
-    private static final int TAB_ID_SETTINGS = 2;
+    private static final int TAB_ID_NEWS = 1;
+    private static final int TAB_ID_ADDRESSES = 2;
+    private static final int TAB_ID_TOOLS = 3;
     
     private View.OnClickListener mTabOnClickListener = new View.OnClickListener(){
         @Override
@@ -31,11 +33,14 @@ public class MainFunctionPage {
             case R.id.tab_accounts:
                 id = TAB_ID_ACCOUNTS;
                 break;
+            case R.id.tab_news:
+                id = TAB_ID_NEWS;
+                break;
             case R.id.tab_address:
                 id = TAB_ID_ADDRESSES;
                 break;
-            case R.id.tab_settings:
-                id = TAB_ID_SETTINGS;
+            case R.id.tab_tools:
+                id = TAB_ID_TOOLS;
                 break;
             default:
                 return;
@@ -50,9 +55,11 @@ public class MainFunctionPage {
         mMainActivity = mainActivity;
         TextView tabTextView = (TextView)mMainActivity.findViewById(R.id.tab_accounts);
         tabTextView.setOnClickListener(mTabOnClickListener);
+        tabTextView = (TextView)mMainActivity.findViewById(R.id.tab_news);
+        tabTextView.setOnClickListener(mTabOnClickListener);
         tabTextView = (TextView)mMainActivity.findViewById(R.id.tab_address);
         tabTextView.setOnClickListener(mTabOnClickListener);
-        tabTextView = (TextView)mMainActivity.findViewById(R.id.tab_settings);
+        tabTextView = (TextView)mMainActivity.findViewById(R.id.tab_tools);
         tabTextView.setOnClickListener(mTabOnClickListener);
         
         viewPagerInit();
@@ -63,10 +70,14 @@ public class MainFunctionPage {
         case TAB_ID_ACCOUNTS:
             mAccountPage.update();
             break;
+        case TAB_ID_NEWS:
+            mNewsPage.update();
+            break;
         case TAB_ID_ADDRESSES:
             mAddressesPage.update();
             break;
-        case TAB_ID_SETTINGS:
+        case TAB_ID_TOOLS:
+            mToolsPage.update();
             break;
         default:
             break;
@@ -76,6 +87,8 @@ public class MainFunctionPage {
     public void release(){
         mAccountPage.release();
         mAddressesPage.release();
+        mToolsPage.release();
+        mNewsPage.release();
     }
     
     /**
@@ -88,21 +101,27 @@ public class MainFunctionPage {
     private int currIndex = 0; // current page
     private AccountPage mAccountPage;
     private AddressesPage mAddressesPage;
+    private ToolsPage mToolsPage;
+    private NewsPage mNewsPage;
     
     private void viewPagerInit(){
         LayoutInflater inflater = mMainActivity.getLayoutInflater();
         View accountsPage = inflater.inflate(R.layout.page_accounts, null);
+        View newsPage = inflater.inflate(R.layout.page_news, null);
         View addressPage = inflater.inflate(R.layout.page_addresses, null);
-        View settingPage = inflater.inflate(R.layout.page_settings, null);
+        View toolsPage = inflater.inflate(R.layout.page_tools, null);
         mAccountPage = new AccountPage(accountsPage);
+        mNewsPage = new NewsPage(newsPage);
         mAddressesPage = new AddressesPage(addressPage);
-        
+        mToolsPage = new ToolsPage(toolsPage);
+
         mViewPager = (ViewPager)mMainActivity.findViewById(R.id.viewpager);
         
         mViewList = new ArrayList<View>();
         mViewList.add(accountsPage);
+        mViewList.add(newsPage);
         mViewList.add(addressPage);
-        mViewList.add(settingPage);
+        mViewList.add(toolsPage);
         
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOnPageChangeListener(new MyOnPageChangeListener());
@@ -110,7 +129,7 @@ public class MainFunctionPage {
         imageView= (View)mMainActivity.findViewById(R.id.cursor);
         DisplayMetrics dm = new DisplayMetrics();  
         mMainActivity.getWindowManager().getDefaultDisplay().getMetrics(dm);  
-        offset = dm.widthPixels / 3;
+        offset = dm.widthPixels / 4;
     }
 
     private void selectPage(int id){
@@ -168,6 +187,10 @@ public class MainFunctionPage {
             animation.setDuration(300);  
             imageView.startAnimation(animation);
             //mCurrentPageId = arg0;
+            //update();
+            if ( TAB_ID_NEWS == currIndex && !mNewsPage.isInit()){
+                mNewsPage.update();
+            }
         }
 
     } 
