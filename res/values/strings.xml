@@ -7,6 +7,8 @@
 
     <string name="change">Change</string>
     <string name="change_node">Change node</string>
+    <string name="select_node">Select a node</string>
+    <string name="select">Select</string>
     <string name="node">Node</string>
     <string name="default_ip">0.0.0.0</string>
     
@@ -34,7 +36,7 @@
     <string name="in_development">In development....</string>
     <string name="unlock">Unlcok account</string>
     <string name="unlock_msg">Unlcok account by a light client is not safe now.</string>
-    <string name="node_ip">Node IP</string>
+    <string name="node_ip">Node IP/domain</string>
     <string name="node_input_msg">The default node 121.199.12.227 is just for test. You should change to your own node.</string>
     <string name="ip_format_error">IP address format error!</string>
     
@@ -72,6 +74,10 @@
     <string name="show_price">Real-Time Price</string>
     <string name="nxt_price">Nxt Price</string>
     <string name="news">News</string>
+    <string name="loading">Loading....</string>
     <string name="news_title">More News http://info.nxtcrypto.org/</string>
+    
+    <string name="not_enough_funds">Not enough funds!</string>
+    <string name="acc_secret_unmatch">Account and secret phrase not match!</string>
     
 </resources>

@@ -1,4 +1,4 @@
-package org.nextcoin.news;
+package org.nextcoin.node;
 
 import java.util.LinkedList;
 
@@ -6,10 +6,7 @@ import org.nextcoin.nxtclient.R;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.text.Html;
 import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +15,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class NewsListView extends ListView{
+public class NodesListView extends ListView{
 
-    private LinkedList<News> mNewsList;
-    public void setNewsList(LinkedList<News> list){
-        mNewsList = list;
-    }
-    
-    public LinkedList<News> getList(){
-        return mNewsList;
+    private LinkedList<NodeContext> mNodeList;
+    public void setNodesList(LinkedList<NodeContext> list){
+        mNodeList = list;
+        //mMyViewAdapter.notifyDataSetChanged();
     }
     
     public void notifyDataSetChanged(){
@@ -41,10 +35,10 @@ public class NewsListView extends ListView{
 
         @Override
         public int getCount() {
-            if ( null == mNewsList || 0 == mNewsList.size() )
+            if ( null == mNodeList || 0 == mNodeList.size() )
                 return 1;
             
-            return mNewsList.size();
+            return mNodeList.size();
         }
 
         @Override
@@ -61,33 +55,38 @@ public class NewsListView extends ListView{
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
             
-            if ( null == mNewsList || 0 == mNewsList.size() ){
-                TextView emptyMsg = new  TextView(getContext());
-                emptyMsg.setGravity(Gravity.CENTER);
-                emptyMsg.setText(R.string.loading);
-                emptyMsg.setTextColor(Color.DKGRAY);
-                emptyMsg.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-                emptyMsg.setPadding(20, 120, 20, 120);
+            if ( null == mNodeList || 0 == mNodeList.size() ){
+                TextView emptyMsg = new  TextView(NodesListView.this.getContext());
+                emptyMsg.setText("");
                 emptyMsg.setTag(null);
                 return emptyMsg;
             }
 
             if (convertView == null || null == convertView.getTag() ) {
                 holder = new ViewHolder();
-                convertView = mInflater.inflate(R.layout.news_list_item, null);
+                convertView = mInflater.inflate(R.layout.node_list_item, null);
                 holder.img = (ImageView) convertView.findViewById(R.id.img);
-                holder.title = (TextView) convertView.findViewById(R.id.title);
-                holder.excerpt = (TextView) convertView.findViewById(R.id.excerpt);
-                holder.date = (TextView) convertView.findViewById(R.id.date);
+                holder.addr = (TextView) convertView.findViewById(R.id.textview_addr);
+                holder.blocks = (TextView) convertView.findViewById(R.id.textview_blocks);
+                holder.version = (TextView) convertView.findViewById(R.id.textview_version);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            News news = mNewsList.get(position);
-            holder.title.setText(news.mTitle);
-            holder.excerpt.setText(Html.fromHtml(news.mExcerpt));
-            holder.date.setText(news.mDate);
+            NodeContext node = mNodeList.get(position);
+            
+            if ( node.isActive() ){
+                holder.img.setImageResource(R.drawable.flag_green);
+                holder.addr.setText(node.getIP());
+                holder.blocks.setText("Blocks:" + node.getBlocks());
+                holder.version.setText("NRS(" + node.getVersion() + ")");
+            }else{
+                holder.img.setImageResource(R.drawable.flag_red);
+                holder.addr.setText(node.getIP());
+                holder.blocks.setText("Blocks: -- ");
+                holder.version.setText("NRS(--)");
+            }
 
             return convertView;
         }
@@ -95,9 +94,9 @@ public class NewsListView extends ListView{
 
     public final class ViewHolder {
         public ImageView img;
-        public TextView title;
-        public TextView excerpt;
-        public TextView date;
+        public TextView addr;
+        public TextView blocks;
+        public TextView version;
     }
     
     private MyViewAdapter mMyViewAdapter;
@@ -107,17 +106,17 @@ public class NewsListView extends ListView{
         this.setAdapter(mMyViewAdapter);
     }
 
-    public NewsListView(Context context, AttributeSet attrs, int defStyle) {
+    public NodesListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
-    public NewsListView(Context context, AttributeSet attrs) {
+    public NodesListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
     
-    public NewsListView(Context context) {
+    public NodesListView(Context context) {
         super(context);
         init();
     }

@@ -1,5 +1,10 @@
 package org.nextcoin.node;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,12 +30,17 @@ public class NodeContext {
      */
     private boolean mActive;
     private String mVersion;
+    private int mBlocks;
     public boolean isActive(){
         return mActive;
     }
     
     public String getVersion(){
         return mVersion;
+    }
+
+    public int getBlocks(){
+        return mBlocks;
     }
 
     /**
@@ -61,7 +71,10 @@ public class NodeContext {
                     try {
                         jsonObj = new JSONObject(strResult);
                         mVersion = jsonObj.getString("version");
+                        String lastBlock = jsonObj.getString("lastBlock");
+                        mBlocks = getBlockHeight(lastBlock);
                         mActive = true;
+                        //Log.v("NodeContext", mIPStr);
                         if ( null != mNodeUpdateListener )
                             mNodeUpdateListener.onUpdate(NodeContext.this);
                         return;
@@ -86,6 +99,38 @@ public class NodeContext {
             if ( null != mNodeUpdateListener )
                 mNodeUpdateListener.onUpdate(NodeContext.this);
         }
+    }
+    
+    private int getBlockHeight(String blockId){
+        String base_url = "http://" + mIPStr + ":7874";
+        String httpUrl = String.format(
+                "%s/nxt?requestType=getBlock&&block=%s", 
+                base_url, blockId);
+
+        try {
+            HttpURLConnection conn = (HttpURLConnection)new URL(httpUrl).openConnection();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuffer sb = new StringBuffer();
+            String line;
+            while((line = br.readLine()) != null)
+                sb.append(line);
+
+            String strResult = sb.toString();
+            JSONObject jsonObj;
+            try {
+                jsonObj = new JSONObject(strResult);
+                int height = jsonObj.getInt("height");
+
+                return height;
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }        
+
+        return 0;
     }
     
     public NodeContext(){

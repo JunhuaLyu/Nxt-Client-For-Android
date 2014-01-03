@@ -3,13 +3,13 @@ package org.nextcoin.nxtclient;
 import org.nextcoin.accounts.AccountsManager;
 import org.nextcoin.addresses.AddressesManager;
 import org.nextcoin.node.NodeContext;
+import org.nextcoin.node.NodesActivity;
 import org.nextcoin.node.NodesManager;
 import org.nextcoin.pricetracker.PriceBar;
 import org.nextcoin.pricetracker.PriceTracker;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,14 +17,13 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
     
     private MainFunctionPage mMainFunctionPage;
 
+    public static final int REQUEST_CODE_NODES = 123;
     /**
      * node information bar
      */
@@ -40,17 +39,18 @@ public class MainActivity extends Activity {
         mChangeNodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openChangeNodeDialog();
+                //openChangeNodeDialog();
+                MainActivity.this.startActivityForResult(
+                        new Intent(MainActivity.this, NodesActivity.class), REQUEST_CODE_NODES);
             }
         });
     }
-    
+
     private void nodeInfoBarUpdateResponse(){
         mNodeInfoView.setText(mNodeContext.getIP());
         if ( mNodeContext.isActive() ){
             mStateIconView.setBackgroundResource(R.drawable.icon_online);
             mNodeInfoView.setTextColor(Color.GREEN);
-            NodesManager.sharedInstance().changeNodeIP(mNodeContext.getIP());
             NodesManager.sharedInstance().save(this);
         }
         else{
@@ -73,38 +73,49 @@ public class MainActivity extends Activity {
         mNodeContext.update();
     }
     
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ( REQUEST_CODE_NODES == requestCode && resultCode == RESULT_OK ){
+            mStateIconView.setBackgroundResource(R.drawable.icon_offline);
+            mNodeInfoView.setTextColor(Color.RED);
+            nodeInfoBarUpdate();
+        }
+    }
+    
     /**
      * change node
      */
-    private View mNodeChangeView;
-    private AlertDialog mNodeChangeDialog;
-    private EditText mEditTextIP;
-    private void openChangeNodeDialog(){
-        if ( null == mNodeChangeDialog ){
-            mNodeChangeView = this.getLayoutInflater().inflate(R.layout.node_input, null);
-            mEditTextIP = (EditText)mNodeChangeView.findViewById(R.id.edittext_ip_input);
-            mNodeChangeDialog = new AlertDialog.Builder(this)
-            .setTitle(R.string.add)
-            .setView(mNodeChangeView)
-            .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface arg0, int arg1) {
-                    String ipStr = mEditTextIP.getText().toString();
-                    if ( ipStr.length() < 7 ){
-                        Toast.makeText(MainActivity.this, R.string.ip_format_error, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    
-                    mStateIconView.setBackgroundResource(R.drawable.icon_offline);
-                    mNodeInfoView.setTextColor(Color.RED);
-                    mNodeContext.setIP(ipStr);
-                    nodeInfoBarUpdate();
-                }})
-            .setNegativeButton(R.string.back, null)
-            .create();
-        }
-        mNodeChangeDialog.show();        
-    }
+//    private View mNodeChangeView;
+//    private AlertDialog mNodeChangeDialog;
+//    private EditText mEditTextIP;
+//    private void openChangeNodeDialog(){
+//        if ( null == mNodeChangeDialog ){
+//            mNodeChangeView = this.getLayoutInflater().inflate(R.layout.node_input, null);
+//            mEditTextIP = (EditText)mNodeChangeView.findViewById(R.id.edittext_ip_input);
+//            mNodeChangeDialog = new AlertDialog.Builder(this)
+//            .setTitle(R.string.add)
+//            .setView(mNodeChangeView)
+//            .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener(){
+//                @Override
+//                public void onClick(DialogInterface arg0, int arg1) {
+//                    String ipStr = mEditTextIP.getText().toString();
+//                    if ( ipStr.length() < 7 ){
+//                        Toast.makeText(MainActivity.this, R.string.ip_format_error, Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//                    
+//                    mStateIconView.setBackgroundResource(R.drawable.icon_offline);
+//                    mNodeInfoView.setTextColor(Color.RED);
+//                    mNodeContext.setIP(ipStr);
+//                    NodesManager.sharedInstance().addNodeIP(ipStr);
+//                    nodeInfoBarUpdate();
+//                }})
+//            .setNegativeButton(R.string.back, null)
+//            .create();
+//        }
+//        mNodeChangeDialog.show();        
+//    }
 
     //
     // message process

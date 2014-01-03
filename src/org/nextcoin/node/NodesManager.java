@@ -32,25 +32,45 @@ public class NodesManager {
     }
     
     private void selectRecentlyNode(Context context){
-        selectNode(0);
+        SharedPreferences prefer = context.getSharedPreferences(mPrefFileName, 0);
+        if ( null == mNodeContext )
+            mNodeContext = new NodeContext();
+
+        String ipStr = prefer.getString(mRecentlyNodeSaveKey, mNodeIPList.get(0));
+        mNodeContext.setIP(ipStr);
     }
-    
+
     private void saveRecentlyNode(Context context){
-        
+        SharedPreferences prefer = context.getSharedPreferences(mPrefFileName, 0);
+        SharedPreferences.Editor editor = prefer.edit();
+        editor.putString(mRecentlyNodeSaveKey, mNodeContext.getIP());
+        editor.commit();
     }
     
-    public void changeNodeIP(String ipStr){
-        mNodeIPList.remove(0);
-        mNodeIPList.add(0, ipStr);
+    public void addNodeIP(String ipStr){
+        //mNodeIPList.remove(0);
+        //mNodeIPList.add(0, ipStr);
+        mNodeIPList.addLast(ipStr);
+    }
+    
+    public void removeNode(int index){
+        mNodeIPList.remove(index);
+        if ( 0 == mNodeIPList.size() ){
+            mNodeIPList.add("121.199.12.227");
+            mNodeIPList.add("176.31.123.8");
+        }
     }
     
     /**
      * the nodes ip list
      */
     private LinkedList<String> mNodeIPList;
+    public LinkedList<String> getNodeIPList(){
+        return mNodeIPList;
+    }
+
     private void loadNodeIPList(Context context){
         mNodeIPList = new LinkedList<String>();
-        //mNodeIPList.addLast("121.199.12.227");
         
         SharedPreferences prefer = context.getSharedPreferences(mPrefFileName, 0);
         String nodeListJson = prefer.getString(mNodeListSaveKey, null); 
@@ -70,8 +90,10 @@ public class NodesManager {
             }
         }
         
-        if ( 0 == mNodeIPList.size() )
+        if ( 0 == mNodeIPList.size() ){
             mNodeIPList.add("121.199.12.227");
+            mNodeIPList.add("176.31.123.8");
+        }
     }
 
     private void saveNodeIPList(Context context){
@@ -103,6 +125,7 @@ public class NodesManager {
      */
     final static private String mPrefFileName = "NodesManagerPrefFile";
     final static private String mNodeListSaveKey = "NodeListSaveKey";
+    final static private String mRecentlyNodeSaveKey = "RecentlyNodeSaveKey";
     public void init(Context context){
         loadNodeIPList(context);
         selectRecentlyNode(context);

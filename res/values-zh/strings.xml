@@ -7,6 +7,8 @@
 
     <string name="change">切换</string>
     <string name="change_node">切换节点</string>
+    <string name="select_node">选择一个节点</string>
+    <string name="select">选定</string>
     <string name="node">切换</string>
     <string name="default_ip">0.0.0.0</string>
     
@@ -34,7 +36,7 @@
     <string name="in_development">开发中....</string>
     <string name="unlock">解锁账户</string>
     <string name="unlock_msg">解锁账户还没开放.</string>
-    <string name="node_ip">节点IP</string>
+    <string name="node_ip">节点IP/域名</string>
     <string name="node_input_msg">默认节点 121.199.12.227 用于测试. 你应该切换到你自己的节点</string>
     <string name="ip_format_error">IP 地址格式错误!</string>
     
@@ -72,6 +74,10 @@
     <string name="show_price">显示实时价格</string>
     <string name="nxt_price">Nxt价格</string>
     <string name="news">新闻</string>
+    <string name="loading">载入中....</string>
     <string name="news_title">NXT新闻  http://info.nxtcrypto.org/</string>
 
+    <string name="not_enough_funds">账号余额不足!</string>
+    <string name="acc_secret_unmatch">账号和密码不匹配!</string>
+    
 </resources>

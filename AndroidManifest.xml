@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.nextcoin.nxtclient"
-    android:versionCode="405"
-    android:versionName="0.4.5" >
+    android:versionCode="408"
+    android:versionName="0.4.8" >
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -64,7 +64,13 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
         </activity>
-        
+
+        <activity
+            android:name="org.nextcoin.node.NodesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+
     </application>
 
 </manifest>

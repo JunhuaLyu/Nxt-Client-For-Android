@@ -3,9 +3,9 @@ package org.nextcoin.util;
 import java.security.MessageDigest;
 import java.util.Arrays;
 
-class Crypto {
+public class Crypto {
     
-    static byte[] getPublicKey(String secretPhrase) {
+    static public byte[] getPublicKey(String secretPhrase) {
         
         try {
             
@@ -22,7 +22,7 @@ class Crypto {
         
     }
     
-    static byte[] sign(byte[] message, String secretPhrase) {
+    static public byte[] sign(byte[] message, String secretPhrase) {
         
         try {
             
@@ -55,7 +55,7 @@ class Crypto {
         }
     }
     
-    static boolean verify(byte[] signature, byte[] message, byte[] publicKey) {
+    static public boolean verify(byte[] signature, byte[] message, byte[] publicKey) {
         try {
             byte[] Y = new byte[32];
             byte[] v = new byte[32];
@@ -75,27 +75,6 @@ class Crypto {
         }
     }
 
-//    void sign(String secretPhrase) {
-//        
-//        signature = Crypto.sign(getBytes(), secretPhrase);
-//        
-//        try {
-//            
-//            while (!verify()) {
-//                
-//                timestamp++;
-//                signature = new byte[64];
-//                signature = Crypto.sign(getBytes(), secretPhrase);
-//                
-//            }
-//            
-//        } catch (Exception e) {
-//            
-//            logMessage(e.toString());
-//            
-//        }
-//        
-//    }
 
 }
 

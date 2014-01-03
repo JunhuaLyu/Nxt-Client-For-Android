@@ -7,6 +7,7 @@ import org.nextcoin.accounts.AccountsManager;
 import org.nextcoin.accounts.AccountsSelectDialog;
 import org.nextcoin.addresses.AddressesManager;
 import org.nextcoin.nxtclient.R;
+import org.nextcoin.util.Vanity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,6 +31,30 @@ public class SendCoinsActivity extends Activity {
         intent.putExtra("receive", receiveAccount);
         intent.putExtra("send", sendAccount);
         context.startActivity(intent);
+    }
+    
+    private boolean checkTransaction(String secret, String recipient, float amount){
+        if ( secret.length() < 1 || recipient.length() < 1 || amount < 1 )
+            return false;
+        
+        String senderId = mEditTextSend.getText().toString();
+        String secretToId = Vanity.generateAccount(secret);
+        if ( !secretToId.equals(senderId) ){
+            Toast.makeText(this, R.string.acc_secret_unmatch, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        LinkedList<Account> accountList = AccountsManager.sharedInstance().getAccountList();
+        if ( null != accountList && accountList.size() > 0 ){
+            for ( Account acc : accountList ){
+                if ( acc.mId.equals(secretToId) && acc.mBalance < amount - 1 ){
+                    Toast.makeText(this, R.string.not_enough_funds, Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 
     private EditText mEditTextSecretPhrase;
@@ -75,12 +100,12 @@ public class SendCoinsActivity extends Activity {
                 String secret = mEditTextSecretPhrase.getText().toString();
                 String recipient = mEditTextReceive.getText().toString();
                 float amount = Float.parseFloat(mEditTextAmount.getText().toString());
-                if ( secret.length() < 1 || recipient.length() < 1 || amount <= 1 )
-                    return;
                 
-                SendCoin.sendCoin(secret, recipient, amount, mResponseListener);
-                mBtnSend.setText(R.string.waiting);
-                mBtnSend.setEnabled(false);
+                if ( checkTransaction(secret, recipient, amount) ){
+                    SendCoin.sendCoin(secret, recipient, amount, mResponseListener);
+                    mBtnSend.setText(R.string.waiting);
+                    mBtnSend.setEnabled(false);
+                }
             }
         });
         

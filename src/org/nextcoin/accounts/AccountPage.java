@@ -76,11 +76,11 @@ public class AccountPage {
     }
     
     private void unlockAccount(int pos){
-        new AlertDialog.Builder(mContext)
-        .setTitle(R.string.unlock)
-        .setMessage(R.string.in_development)
-        .setNegativeButton(R.string.back, null)
-        .show();
+//        new AlertDialog.Builder(mContext)
+//        .setTitle(R.string.unlock)
+//        .setMessage(R.string.in_development)
+//        .setNegativeButton(R.string.back, null)
+//        .show();
     }
 
     private void sendNxt(int pos){
