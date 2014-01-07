@@ -69,7 +69,16 @@
 			android:textColor="#FF000000"
 			android:textSize="18dip"
 			/>
-        
+
+        <TextView android:id="@+id/date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="2014.01.04"
+            android:textColor="#666"
+            android:textSize="14dip"
+            />
+        		
 	</LinearLayout>
 
 </LinearLayout>

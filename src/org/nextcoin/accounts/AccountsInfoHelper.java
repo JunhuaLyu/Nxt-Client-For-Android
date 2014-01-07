@@ -106,28 +106,34 @@ public class AccountsInfoHelper {
     // request transaction history
     //
     private ResponseListener mTransactionResponseListener;
-    public void requestTransactionHistory(Account account, ResponseListener listener){
+    public void requestTransactionHistory(Account account, ResponseListener listener, int days){
         mTransactionResponseListener = listener;
         NodeContext nodeContext = NodesManager.sharedInstance().getCurrentNode();
         String ip = null;
         if ( nodeContext.isActive() )
             ip = nodeContext.getIP();
         
-        getTransactionHistory(ip, account, mTransactionResponseListener);
+        getTransactionHistory(ip, account, mTransactionResponseListener, days);
     }
 
     private ResponseListener mTransactionResponse;
     private Account mTransactionAccount;
-    private void getTransactionHistory(String ip, Account account, ResponseListener listener){
+    private void getTransactionHistory(String ip, Account account, ResponseListener listener, int days){
         mTransactionResponse = listener;
         mTransactionAccount = account;
         if ( null == ip )
             mTransactionResponse.onResponse(false, account, null);
 
+        int timestamp = NodesManager.sharedInstance().getCurrentNode().getTimestamp();
+        if ( 0 == days )
+            timestamp = 0;
+        else
+            timestamp -= days * 24 * 60 * 60;
+
         String base_url = "http://" + ip + ":7874";
         String httpUrl = String.format(
-                "%s/nxt?requestType=getAccountTransactionIds&account=%s&timestamp=0", 
-                base_url, mTransactionAccount.mId);
+                "%s/nxt?requestType=getAccountTransactionIds&account=%s&timestamp=%d", 
+                base_url, mTransactionAccount.mId, timestamp);
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(httpUrl, new AsyncHttpResponseHandler() {

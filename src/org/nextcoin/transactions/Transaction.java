@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 
 import org.json.JSONObject;
+import org.nextcoin.alias.Alias;
 import org.nextcoin.node.NodeContext;
 import org.nextcoin.node.NodesManager;
 
@@ -16,12 +17,14 @@ public class Transaction {
     public boolean mLoaded = false;
     public String mId;
     public int mType;
+    public int mSubType;
     public int mConfirmations;
     public int mTimestamp = 0;
     public String mRecipient;
     public String mSender;
     public float mAmount;
     public float mFee;
+    public Object mAttachment;
     
     static public boolean loadTransaction(Transaction transaction){
         NodeContext nodeContext = NodesManager.sharedInstance().getCurrentNode();
@@ -50,15 +53,32 @@ public class Transaction {
                 jsonObj = new JSONObject(strResult);
                 transaction.mLoaded = true; 
                 transaction.mType = jsonObj.getInt("type");
-                if ( 0 == transaction.mType ){
-                    transaction.mConfirmations = jsonObj.getInt("confirmations");
-                    transaction.mTimestamp = jsonObj.getInt("timestamp");
-                    transaction.mRecipient = jsonObj.getString("recipient");
-                    transaction.mSender = jsonObj.getString("sender");
-                    double amount = jsonObj.getDouble("amount");
-                    transaction.mAmount = (float)amount;
-                    double fee = jsonObj.getDouble("fee");
-                    transaction.mFee = (float)fee;
+                transaction.mTimestamp = jsonObj.getInt("timestamp");
+                transaction.mConfirmations = jsonObj.getInt("confirmations");
+                double amount = jsonObj.getDouble("amount");
+                transaction.mAmount = (float)amount;
+                double fee = jsonObj.getDouble("fee");
+                transaction.mFee = (float)fee;
+                if ( jsonObj.has("subtype") )
+                    transaction.mSubType = jsonObj.getInt("subtype");
+
+                if ( NxtTransaction.TYPE_PAYMENT == transaction.mType ){
+                    if ( NxtTransaction.SUBTYPE_PAYMENT_ORDINARY_PAYMENT == transaction.mSubType ){
+                        transaction.mRecipient = jsonObj.getString("recipient");
+                        transaction.mSender = jsonObj.getString("sender");
+                    }
+                }else if ( NxtTransaction.TYPE_MESSAGING == transaction.mType ){
+                    if ( NxtTransaction.SUBTYPE_MESSAGING_ALIAS_ASSIGNMENT == transaction.mSubType ){
+                        JSONObject jsonAlias = jsonObj.getJSONObject("attachment");
+                        if ( jsonAlias.has("alias") ){
+                            Alias alias = new Alias();
+                            alias.mName = jsonAlias.getString("alias");
+                            if ( jsonAlias.has("uri") )
+                                alias.mUrl = jsonAlias.getString("uri");
+                            
+                            transaction.mAttachment  = alias;
+                        }
+                    }
                 }
 
                 return true;

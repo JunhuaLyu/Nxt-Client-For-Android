@@ -1,13 +1,14 @@
 package org.nextcoin.util;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class NxtUtil {
     
     static private long mCalendarGenMs;
     static {
-        Calendar calendarGen = Calendar.getInstance();
-        //calendarGen.set(Calendar.ZONE_OFFSET, 0);
+        Calendar calendarGen = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"));
         calendarGen.set(Calendar.YEAR, 2013);
         calendarGen.set(Calendar.MONTH, Calendar.NOVEMBER);
         calendarGen.set(Calendar.DAY_OF_MONTH, 24);
@@ -17,13 +18,15 @@ public class NxtUtil {
         calendarGen.set(Calendar.MILLISECOND, 0);
         mCalendarGenMs = calendarGen.getTimeInMillis();
     }
+    
+    static public long getStartTime(){
+        return mCalendarGenMs;
+    }
 
     static public int getTimestamp(){
-        //long stamp = System.currentTimeMillis() - mCalendarGenMs;
-        Calendar calendar = Calendar.getInstance();
-        //calendarGen.set(Calendar.ZONE_OFFSET, 0);
-        int offset = calendar.getTimeZone().getRawOffset();
-        long stamp = calendar.getTimeInMillis() - offset - mCalendarGenMs;
+        Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"));
+        long millis = calendar.getTimeInMillis();
+        long stamp = millis - mCalendarGenMs;
 
         stamp = ( stamp + 500 ) / 1000;
         return (int)stamp;

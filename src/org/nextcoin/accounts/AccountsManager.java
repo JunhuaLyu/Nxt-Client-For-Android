@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.nextcoin.alias.Alias;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,12 +22,26 @@ public class AccountsManager {
     }
     
     public void addAccount(Context context, String id, String tag){
+        addAccount(context, id, tag, null);
+    }
+    
+    public void addAccount(Context context, String id, String tag, String img){
         if ( null == tag )
             tag = "null";
 
         Account acct = new Account();
         acct.mId = id;
         acct.mTag = tag;
+        acct.mImg = img;
+        mAccountList.addLast(acct);
+        saveAccountList(context);
+    }
+    
+    public void addAccount(Context context, Alias alias){
+        Account acct = new Account();
+        acct.mId = alias.mAccountId;
+        acct.mTag = alias.mName;
+        acct.mImg = alias.mImg;
         mAccountList.addLast(acct);
         saveAccountList(context);
     }
@@ -48,7 +63,7 @@ public class AccountsManager {
         }
     }
 
-    private void loadAccountIPList(Context context){
+    private void loadAccountList(Context context){
         mAccountList = new LinkedList<Account>();
 
         SharedPreferences prefer = context.getSharedPreferences(mPrefFileName, 0);
@@ -63,9 +78,12 @@ public class AccountsManager {
                     JSONObject  jso = jarray.getJSONObject(i);
                     String strId = jso.getString("ID");
                     String strTag = jso.getString("TAG");
+                    String strImg = null;
+                    if ( jso.has("IMG") )
+                        strImg = jso.getString("IMG");
 
                     if ( null != strId ){
-                        addAccount(context, strId, strTag);
+                        addAccount(context, strId, strTag, strImg);
                     }
                 }
             } catch (JSONException e) {
@@ -76,27 +94,28 @@ public class AccountsManager {
 
     public void saveAccountList(Context context){
         if ( null != mAccountList && mAccountList.size() >= 0 ){
-            StringBuffer strbuff = new StringBuffer();
-            strbuff.append("{\"AccountList\":[");
-            
-            for ( int i = 0; i < mAccountList.size(); ++ i ){
-                Account acct = mAccountList.get(i);
-                strbuff.append("{\"ID\":\"");
-                strbuff.append(acct.mId);
-                strbuff.append("\", \"TAG\":\"");
-                strbuff.append(acct.mTag);
-                if ( i == mAccountList.size() - 1 )
-                    strbuff.append("\"}");
-                else
-                    strbuff.append("\"},");
+            try {
+                JSONArray jarray = new JSONArray();
+                for ( int i = 0; i < mAccountList.size(); ++ i ){
+                    Account acct = mAccountList.get(i);
+                    JSONObject  jso = new JSONObject();
+                    jso.put("ID", acct.mId);
+                    jso.put("TAG", acct.mTag);
+                    jso.put("IMG", acct.mImg);
+                    jarray.put(jso);
+                }
+                
+                JSONObject  json = new JSONObject();
+                json.put("AccountList", jarray);
+
+                String jsonStr = json.toString();
+                SharedPreferences prefer = context.getSharedPreferences(mPrefFileName, 0);
+                SharedPreferences.Editor editor = prefer.edit();
+                editor.putString(mAccountListSaveKey, jsonStr);
+                editor.commit();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            strbuff.append("]}");
-            
-            String jsonStr = strbuff.toString();
-            SharedPreferences prefer = context.getSharedPreferences(mPrefFileName, 0);
-            SharedPreferences.Editor editor = prefer.edit();
-            editor.putString(mAccountListSaveKey, jsonStr);
-            editor.commit();
         }
     }
     
@@ -106,7 +125,7 @@ public class AccountsManager {
     final static private String mPrefFileName = "AccountsManagerPrefFile";
     final static private String mAccountListSaveKey = "AccountListSaveKey";
     public void init(Context context){
-        loadAccountIPList(context);
+        loadAccountList(context);
     }
 
     public void release(Context context){

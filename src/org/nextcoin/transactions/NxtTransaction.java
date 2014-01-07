@@ -11,19 +11,19 @@ import org.nextcoin.util.Crypto;
 public class NxtTransaction {
 
     static final long serialVersionUID = 0L;
-    static final byte TYPE_PAYMENT = 0;
-    static final byte TYPE_MESSAGING = 1;
-    static final byte TYPE_COLORED_COINS = 2;
-    static final byte SUBTYPE_PAYMENT_ORDINARY_PAYMENT = 0;
-    static final byte SUBTYPE_MESSAGING_ARBITRARY_MESSAGE = 0;
-    static final byte SUBTYPE_MESSAGING_ALIAS_ASSIGNMENT = 1;
-    static final byte SUBTYPE_COLORED_COINS_ASSET_ISSUANCE = 0;
-    static final byte SUBTYPE_COLORED_COINS_ASSET_TRANSFER = 1;
-    static final byte SUBTYPE_COLORED_COINS_ASK_ORDER_PLACEMENT = 2;
-    static final byte SUBTYPE_COLORED_COINS_BID_ORDER_PLACEMENT = 3;
-    static final byte SUBTYPE_COLORED_COINS_ASK_ORDER_CANCELLATION = 4;
-    static final byte SUBTYPE_COLORED_COINS_BID_ORDER_CANCELLATION = 5;
-    static final int ASSET_ISSUANCE_FEE = 1000;
+    public static final byte TYPE_PAYMENT = 0;
+    public static final byte TYPE_MESSAGING = 1;
+    public static final byte TYPE_COLORED_COINS = 2;
+    public static final byte SUBTYPE_PAYMENT_ORDINARY_PAYMENT = 0;
+    public static final byte SUBTYPE_MESSAGING_ARBITRARY_MESSAGE = 0;
+    public static final byte SUBTYPE_MESSAGING_ALIAS_ASSIGNMENT = 1;
+    public static final byte SUBTYPE_COLORED_COINS_ASSET_ISSUANCE = 0;
+    public static final byte SUBTYPE_COLORED_COINS_ASSET_TRANSFER = 1;
+    public static final byte SUBTYPE_COLORED_COINS_ASK_ORDER_PLACEMENT = 2;
+    public static final byte SUBTYPE_COLORED_COINS_BID_ORDER_PLACEMENT = 3;
+    public static final byte SUBTYPE_COLORED_COINS_ASK_ORDER_CANCELLATION = 4;
+    public static final byte SUBTYPE_COLORED_COINS_BID_ORDER_CANCELLATION = 5;
+    public static final int ASSET_ISSUANCE_FEE = 1000;
 
     byte type;
     byte subtype;

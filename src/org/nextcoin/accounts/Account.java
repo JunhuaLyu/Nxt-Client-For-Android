@@ -8,6 +8,7 @@ import org.nextcoin.transactions.Transaction;
 public class Account {
     public String mId;
     public String mTag;
+    public String mImg;
     public float mBalance;
     public float mUnconfirmedBalance;
     public LinkedList<Transaction> mTransactionList;

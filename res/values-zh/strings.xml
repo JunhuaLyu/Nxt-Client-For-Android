@@ -80,4 +80,12 @@
     <string name="not_enough_funds">账号余额不足!</string>
     <string name="acc_secret_unmatch">账号和密码不匹配!</string>
     
+    <string name="week1">最近一周</string>
+    <string name="month1">最近一月</string>
+    <string name="total">全部</string>
+    
+    <string name="in">收入</string>
+    <string name="out">支出</string>
+    <string name="other">其他</string>
+    
 </resources>

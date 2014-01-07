@@ -56,7 +56,7 @@ public class SendCoin {
         
         byte type = NxtTransaction.TYPE_PAYMENT;
         byte subtype = NxtTransaction.SUBTYPE_PAYMENT_ORDINARY_PAYMENT;
-        int timestamp = NxtUtil.getTimestamp();
+        int timestamp = NxtUtil.getTimestamp() - 15;
         short deadline = 1500;
         byte[] senderPublicKey = Crypto.getPublicKey(secret);
         long recipient = new BigInteger(recipientStr).longValue();;

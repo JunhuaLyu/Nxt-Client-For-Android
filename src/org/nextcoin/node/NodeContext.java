@@ -31,6 +31,7 @@ public class NodeContext {
     private boolean mActive;
     private String mVersion;
     private int mBlocks;
+    private int mTimestamp;
     public boolean isActive(){
         return mActive;
     }
@@ -41,6 +42,10 @@ public class NodeContext {
 
     public int getBlocks(){
         return mBlocks;
+    }
+    
+    public int getTimestamp(){
+        return mTimestamp;
     }
 
     /**
@@ -71,6 +76,7 @@ public class NodeContext {
                     try {
                         jsonObj = new JSONObject(strResult);
                         mVersion = jsonObj.getString("version");
+                        mTimestamp = jsonObj.getInt("time");
                         String lastBlock = jsonObj.getString("lastBlock");
                         mBlocks = getBlockHeight(lastBlock);
                         mActive = true;

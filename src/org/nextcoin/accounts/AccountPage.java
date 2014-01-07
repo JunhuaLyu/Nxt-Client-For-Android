@@ -144,7 +144,7 @@ public class AccountPage {
             public void onResult(int result, Alias alias) {
                 if ( Alias.RESULT_SUCCESS == result ){
                     AccountsManager.sharedInstance().addAccount(
-                            mAccountsPage.getContext(), alias.mAccountId, alias.mName);
+                            mAccountsPage.getContext(), alias);
                     mAccountListView.setAccountList(
                             AccountsManager.sharedInstance().getAccountList());
                     update(AccountsManager.sharedInstance().getAccountList().getLast());

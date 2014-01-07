@@ -80,4 +80,12 @@
     <string name="not_enough_funds">Not enough funds!</string>
     <string name="acc_secret_unmatch">Account and secret phrase not match!</string>
     
+    <string name="week1">7 Days</string>
+    <string name="month1">30 Days</string>
+    <string name="total">Total</string>
+    
+    <string name="in">In</string>
+    <string name="out">Out</string>
+    <string name="other">Other</string>
+    
 </resources>

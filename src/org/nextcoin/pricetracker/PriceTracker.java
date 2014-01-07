@@ -1,12 +1,9 @@
 package org.nextcoin.pricetracker;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.other.util.HttpUtil;
 
 
 /**
@@ -62,17 +59,10 @@ public class PriceTracker {
         public void run() {
             while (mRunning){
                 try {
-                    String httpUrl = "http://dgex.com/API/trades3h.json";
-                    HttpURLConnection conn = (HttpURLConnection)new URL(httpUrl).openConnection();
-
-                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuffer sb = new StringBuffer();
-                    String line;
-                    while((line = br.readLine()) != null)
-                        sb.append(line);
-                    
+                    String httpsUrl = "https://dgex.com/API/trades3h.json";
+                    String result = HttpUtil.getHttps(httpsUrl);
                     JSONObject jsonObj;
-                    jsonObj = new JSONObject(sb.toString());
+                    jsonObj = new JSONObject(result);
                     JSONArray jarray = jsonObj.getJSONArray("ticker");
                     JSONObject newTicker = jarray.getJSONObject(0);
                     JSONObject oldTicker = jarray.getJSONObject(jarray.length() - 1);

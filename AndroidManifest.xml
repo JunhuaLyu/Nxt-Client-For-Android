@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.nextcoin.nxtclient"
-    android:versionCode="408"
-    android:versionName="0.4.8" >
+    android:versionCode="409"
+    android:versionName="0.4.9" >
 
     <uses-sdk
         android:minSdkVersion="7"

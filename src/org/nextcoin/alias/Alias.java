@@ -11,6 +11,7 @@ public class Alias {
     public String mName;
     public String mUrl;
     public String mAccountId;
+    public String mImg;
     
     public void loadAsyn(AliasResponse response){
         mAliasResponse = response;
@@ -39,7 +40,9 @@ public class Alias {
                     if ( jsonObj.has("uri") ){
                         mUrl = jsonObj.getString("uri");
                         String content = mUrl.toLowerCase();
-                        if ( content.startsWith("nacc:") )
+                        if ( content.startsWith("nxter:") )
+                            content = parseNxter(content.substring(6));
+                        else if ( content.startsWith("nacc:") )
                             content = content.substring(5);
                         else if ( content.startsWith("nxt:") )
                             content = content.substring(4);
@@ -65,6 +68,24 @@ public class Alias {
                 mAliasResponse.onResult(RESULT_FAILED, null);
             }
         });
+    }
+    
+    // {"web":"http://www.notsoshifty.de/","fb":"notsoshifty","twitter":"notsoshifty","nxtacct":"11111125831111116332","smtp":"notsoshifty111@example.com","skype":"notsoshifty1971"}
+    // nxter:acc=5693933960808456307&img=bbyk.sinaapp.com/snake.png
+    private String parseNxter(String content){
+        String acc = "";
+        String pairs[] = content.split("&");
+        for ( int i = 0; i < pairs.length; ++ i ){
+            String pair[] = pairs[i].split("=");
+            if ( 2 == pair.length ){
+                if ( pair[0].equals("acc") )
+                    acc = pair[1];
+                else if ( pair[0].equals("img") )
+                    mImg = pair[1];
+            }
+        }
+
+        return acc;
     }
     
     private AliasResponse mAliasResponse;

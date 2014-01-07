@@ -120,8 +120,7 @@ public class AddressesPage {
             @Override
             public void onResult(int result, Alias alias) {
                 if ( Alias.RESULT_SUCCESS == result ){
-                    AddressesManager.sharedInstance().addAccount(
-                            mContext, alias.mAccountId, alias.mName);
+                    AddressesManager.sharedInstance().addAccount(mContext, alias);
                     mAddressesListView.setAccountList(
                             AddressesManager.sharedInstance().getAccountList());
                     
