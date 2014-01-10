@@ -1,14 +1,11 @@
 package org.nextcoin.addresses;
 
-import java.net.URL;
 import java.util.LinkedList;
 
 import org.nextcoin.accounts.Account;
 import org.nextcoin.nxtclient.R;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -86,19 +83,20 @@ public class AddressesListView extends ListView{
             holder.info.setText(acct.mId);
             holder.img.setId(position);
             holder.img.setOnClickListener(mSendOnClickListener);
-            if ( null != acct.mImg && acct.mImg.length() > 3 ){
-                try {
-                    URL picUrl;
-                    if ( acct.mImg.startsWith("http://") )
-                        picUrl = new URL(acct.mImg);
-                    else
-                        picUrl = new URL("http://" + acct.mImg);
-                    Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream()); 
-                    holder.img.setImageBitmap(pngBM);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            holder.img.setImageResource(R.drawable.receive_nxt);
+//            if ( null != acct.mImg && acct.mImg.length() > 3 ){
+//                try {
+//                    URL picUrl;
+//                    if ( acct.mImg.startsWith("http://") )
+//                        picUrl = new URL(acct.mImg);
+//                    else
+//                        picUrl = new URL("http://" + acct.mImg);
+//                    Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream()); 
+//                    holder.img.setImageBitmap(pngBM);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
 
             return convertView;
         }

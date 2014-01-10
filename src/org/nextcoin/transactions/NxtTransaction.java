@@ -1,10 +1,12 @@
 package org.nextcoin.transactions;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.security.MessageDigest;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.nextcoin.util.Crypto;
 
@@ -40,7 +42,7 @@ public class NxtTransaction {
     //long block;
     //int height;
 
-    NxtTransaction(byte type, byte subtype, int timestamp, short deadline, byte[] senderPublicKey, long recipient, int amount, int fee, long referencedTransaction, byte[] signature)
+    public NxtTransaction(byte type, byte subtype, int timestamp, short deadline, byte[] senderPublicKey, long recipient, int amount, int fee, long referencedTransaction, byte[] signature)
     {
       this.type = type;
       this.subtype = subtype;
@@ -55,8 +57,12 @@ public class NxtTransaction {
 
       //this.height = 2147483647;
     }
+    
+    public void setAttachment(NxtTransaction.Attachment attach){
+        attachment = attach;
+    }
 
-    byte[] getBytes()
+    public byte[] getBytes()
     {
       ByteBuffer buffer = ByteBuffer.allocate(128 + (this.attachment == null ? 0 : this.attachment.getBytes().length));
       buffer.order(ByteOrder.LITTLE_ENDIAN);
@@ -84,7 +90,7 @@ public class NxtTransaction {
         return bigInteger.longValue();
     }
 
-    void sign(String secretPhrase) {
+    public void sign(String secretPhrase) {
         this.signature = Crypto.sign(getBytes(), secretPhrase);
         try {
             while (!verify())
@@ -108,6 +114,47 @@ public class NxtTransaction {
         return Crypto.verify(this.signature, data, this.senderPublicKey);
     }
 
+    static public class MessagingAliasAssignmentAttachment implements
+            NxtTransaction.Attachment, Serializable {
+        static final long serialVersionUID = 0L;
+        final String alias;
+        final String uri;
+
+        public MessagingAliasAssignmentAttachment(String paramString1,
+                String paramString2) {
+            this.alias = paramString1;
+            this.uri = paramString2;
+        }
+
+        public byte[] getBytes() {
+            try {
+                byte[] arrayOfByte1 = this.alias.getBytes("UTF-8");
+                byte[] arrayOfByte2 = this.uri.getBytes("UTF-8");
+                ByteBuffer localByteBuffer = ByteBuffer.allocate(1
+                        + arrayOfByte1.length + 2 + arrayOfByte2.length);
+                localByteBuffer.order(ByteOrder.LITTLE_ENDIAN);
+                localByteBuffer.put((byte) arrayOfByte1.length);
+                localByteBuffer.put(arrayOfByte1);
+                localByteBuffer.putShort((short) arrayOfByte2.length);
+                localByteBuffer.put(arrayOfByte2);
+                return localByteBuffer.array();
+            } catch (Exception localException) {
+            }
+            return null;
+        }
+
+        public JSONObject getJSONObject() {
+            JSONObject localJSONObject = new JSONObject();
+            try {
+                localJSONObject.put("alias", this.alias);
+                localJSONObject.put("uri", this.uri);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return localJSONObject;
+        }
+    }
+    
     static abstract interface Attachment
     {
       public abstract byte[] getBytes();

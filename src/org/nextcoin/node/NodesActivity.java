@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -22,7 +24,10 @@ public class NodesActivity extends Activity {
             new NodeContext.NodeUpdateListener(){
         @Override
         public void onUpdate(NodeContext node) {
-            mNodesListView.notifyDataSetChanged();
+            Message msg = new Message();
+            msg.obj = NodesActivity.this;
+            msg.what = MSG_NODE_UPDATE;
+            mMessageHandler.sendMessage(msg);
         }
     };
 
@@ -66,7 +71,7 @@ public class NodesActivity extends Activity {
     public void onResume(){
         super.onResume();
         for ( NodeContext node : mNodeList ){
-            node.update();
+            node.updateAsync();
         }
     }
     
@@ -126,12 +131,38 @@ public class NodesActivity extends Activity {
                     node.setIP(ipStr);
                     node.setNodeUpdateListener(mNodeUpdateListener);
                     mNodeList.addLast(node);
+                    mNodesListView.notifyDataSetChanged();
                     node.update();
                 }})
             .setNegativeButton(R.string.back, null)
             .create();
         }
         mNodeChangeDialog.show();        
+    }
+
+    //
+    // message process
+    //
+    static private Handler mMessageHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if ( msg.obj instanceof NodesActivity ){
+                NodesActivity instance = (NodesActivity)msg.obj;
+                instance.handleMessage(msg);
+            }
+        }
+    };
+
+    static final private int MSG_NODE_UPDATE = 0;
+    public void handleMessage(Message msg) {
+        switch (msg.what){
+            case MSG_NODE_UPDATE:
+                mNodesListView.notifyDataSetChanged();
+                break;
+            default:
+                break;
+        }
     }
     
 }

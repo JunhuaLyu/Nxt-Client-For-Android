@@ -37,6 +37,12 @@ import com.other.util.ProgressDialogExt;
 
 public class TransactionsActivity extends Activity {
 
+    static public void open(Context context, int accountPos){
+        Intent intent = new Intent(context, TransactionsActivity.class);
+        intent.putExtra("AccountPos", accountPos);
+        context.startActivity(intent);
+    }
+
     private AccountsInfoHelper.ResponseListener mResponseListener = 
             new AccountsInfoHelper.ResponseListener() {
         @Override
@@ -55,6 +61,8 @@ public class TransactionsActivity extends Activity {
                 int size = account.mTransactionList.size();
                 int i;
                 for ( i = 0; i < size; i ++ ){
+                    if ( null == mLoadingProgressDialogExt )
+                        return;
                     setProgressDialog((i + 1) * 100 / size);
                     Transaction.loadTransaction(account.mTransactionList.get(i));
                 }
@@ -144,12 +152,6 @@ public class TransactionsActivity extends Activity {
         }
     }
     
-    static public void open(Context context, int accountPos){
-        Intent intent = new Intent(context, TransactionsActivity.class);
-        intent.putExtra("AccountPos", accountPos);
-        context.startActivity(intent);
-    }
-
     private Account mAccount;
     private TransactionListView mTransactionListView;
     private TransactionListView mTransactionListViewIn;
@@ -164,9 +166,21 @@ public class TransactionsActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transactions_activity);
-        int accountPos = this.getIntent().getIntExtra("AccountPos", 0);
-        mAccount = AccountsManager.sharedInstance().getAccountList().get(accountPos);
+        int accountPos = this.getIntent().getIntExtra("AccountPos", -1);
+        int days = 30;
+        if ( -1 == accountPos ){
+            String accId = this.getIntent().getStringExtra("AccountId");
+            mAccount = AccountsManager.sharedInstance().getAccount(accId);
+            days = 7;
+        }
+        else
+            mAccount = AccountsManager.sharedInstance().getAccountList().get(accountPos);
         
+        if ( null == mAccount ){
+            this.finish();
+            return;
+        }
+
         TextView textViewAccountId = (TextView)this.findViewById(R.id.textview_account_id);
         textViewAccountId.setText(mAccount.mId);
         
@@ -219,7 +233,8 @@ public class TransactionsActivity extends Activity {
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPeriod.setAdapter(spinnerAdapter);
-        spinnerPeriod.setSelection(1);
+        if ( 30 == days )
+            spinnerPeriod.setSelection(1);
         spinnerPeriod.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -252,7 +267,7 @@ public class TransactionsActivity extends Activity {
         this.getWindowManager().getDefaultDisplay().getMetrics(dm);  
         offset = dm.widthPixels / 4;
         
-        transactionsRequest(30);
+        transactionsRequest(days);
     }
 
     private static final int TAB_ID_TOTAL = 0;

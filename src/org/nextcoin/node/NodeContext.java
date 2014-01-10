@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.other.util.HttpUtil;
 
 public class NodeContext {
     /**
@@ -58,6 +59,37 @@ public class NodeContext {
     private NodeUpdateListener mNodeUpdateListener;
     public void setNodeUpdateListener(NodeUpdateListener l){
         mNodeUpdateListener = l;
+    }
+    
+    public void updateAsync(){
+        if ( null == mIPStr )
+            return;
+
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                String base_url = "http://" + mIPStr + ":7874";
+                String httpUrl = String.format("%s/nxt?requestType=getState", base_url);
+                try {
+                    String response = HttpUtil.getHttp(httpUrl);
+                    if ( response != null ){
+                        JSONObject jsonObj = new JSONObject(response);
+                        mVersion = jsonObj.getString("version");
+                        mTimestamp = jsonObj.getInt("time");
+                        String lastBlock = jsonObj.getString("lastBlock");
+                        mBlocks = getBlockHeight(lastBlock);
+                        mActive = true;
+                        if ( null != mNodeUpdateListener )
+                            mNodeUpdateListener.onUpdate(NodeContext.this);
+                        return;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mActive = false;
+                if ( null != mNodeUpdateListener )
+                    mNodeUpdateListener.onUpdate(NodeContext.this);
+            }}).start();
     }
     
     public void update(){

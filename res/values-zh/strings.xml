@@ -1,9 +1,9 @@
 <resources>
 
-    <string name="app_name">Nxt客户端</string>
+    <string name="app_name">NextCoin</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">NxtClient</string>
+    <string name="title_activity_main">NextCoin</string>
 
     <string name="change">切换</string>
     <string name="change_node">切换节点</string>
@@ -83,9 +83,30 @@
     <string name="week1">最近一周</string>
     <string name="month1">最近一月</string>
     <string name="total">全部</string>
-    
+
     <string name="in">收入</string>
     <string name="out">支出</string>
     <string name="other">其他</string>
+    <string name="new_notify">新通知</string>
+    <string name="new_transaction">新交易</string>
+    <string name="received">接收到</string>
+    <string name="from">来自</string>
+    <string name="notification">通知栏消息</string>
+    <string name="vibrate">振动</string>
+    <string name="tone">铃声</string>
+    <string name="interval">刷新间隔</string>
+    <string name="minute">分钟</string>
+    <string name="exit">退出</string>
+    <string name="check">查看</string>
+    <string name="assign">注册</string>
+    <string name="alias_assign">别名注册</string>
+    <string name="uri">Uri</string>
+    
+    <string name="connection_failed">Node connection is failed.</string>
+    
+    <string name="transaction_confirm">交易确认</string>
+    <string name="alias_confirm">别名注册确认</string>
+    <string name="sent">发送</string>
+    <string name="to">给</string>
     
 </resources>

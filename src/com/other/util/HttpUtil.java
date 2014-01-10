@@ -2,6 +2,7 @@ package com.other.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
@@ -17,7 +18,16 @@ import javax.net.ssl.X509TrustManager;
 public class HttpUtil {
     
     public static String getHttp(String httpUrl) throws Exception {
-        return null;
+        HttpURLConnection conn = (HttpURLConnection)new URL(httpUrl).openConnection();
+        conn.setConnectTimeout(5000);
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        StringBuffer sb = new StringBuffer();
+        String line;
+        while((line = br.readLine()) != null)
+            sb.append(line);
+
+        return sb.toString();
     }
 
     public static String getHttps(String httpsUrl) throws Exception {

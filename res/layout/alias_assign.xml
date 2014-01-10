@@ -1,0 +1,157 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:background="#ddd"
+    android:layout_height="fill_parent"
+    >
+
+<LinearLayout 
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="44dp"
+        android:background="#888"
+        android:gravity="center_vertical"
+        >
+        
+        <View 
+            android:layout_marginLeft="10dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/alias_icon"
+            />
+
+        <TextView android:id="@+id/textview_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/alias_assign"
+            android:textColor="#000"
+            android:textSize="18dp"
+            />
+        
+    </LinearLayout>
+    
+    <TextView android:id="@+id/textview_alias_input" 
+        android:layout_marginTop="5dp"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:text="@string/alias"
+        android:textColor="#000"
+        android:textSize="16dp"
+        />
+
+    <EditText android:id="@+id/edittext_alias_input"
+        android:layout_marginTop="5dp"
+        android:layout_width="240dp"
+        android:layout_height="36dp"
+        android:textSize="14dp"
+        android:inputType="text"
+        />
+    
+    <TextView android:id="@+id/textview_uri_input" 
+        android:layout_marginTop="5dp"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:text="@string/uri"
+        android:textColor="#000"
+        android:textSize="16dp"
+        />
+
+    <EditText android:id="@+id/edittext_uri_input"
+        android:layout_marginTop="5dp"
+        android:layout_width="240dp"
+        android:layout_height="36dp"
+        android:textSize="14dp"
+        android:inputType="textMultiLine"
+        />
+    
+    <LinearLayout 
+        android:layout_width="240dp"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        >
+
+        <TextView android:id="@+id/textview_fee_input" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fee(Nxt):"
+            android:textColor="#000"
+            android:textSize="14dp"
+            />
+    
+        <EditText android:id="@+id/edittext_fee_input"
+            android:layout_width="80dp"
+            android:layout_height="36dp"
+            android:textSize="14dp"
+            android:inputType="number"
+            android:text="1"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout 
+        android:layout_width="240dp"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        >
+
+        <TextView android:id="@+id/textview_deadline_input" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deadline(hour):"
+            android:textColor="#000"
+            android:textSize="14dp"
+            />
+    
+        <EditText android:id="@+id/edittext_deadline_input"
+            android:layout_width="80dp"
+            android:layout_height="36dp"
+            android:textSize="14dp"
+            android:inputType="number"
+            android:text="1"
+            />
+        
+    </LinearLayout>
+    
+    <TextView 
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:text="@string/secret_phrase"
+        android:textColor="#000"
+        android:textSize="16dp"
+        android:layout_marginTop="5dp"
+        />
+
+    <EditText android:id="@+id/edittext_secret_input"
+        android:layout_marginTop="5dp"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine|textPassword"
+        android:textSize="16dp"
+        />
+
+    <CheckBox
+        android:id="@+id/check_visable"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:textSize="14dp"
+        android:text="@string/visable" />
+
+    <Button android:id="@+id/btn_account_create"
+        android:layout_marginTop="5dp"
+        android:layout_width="160dp"
+        android:layout_height="44dp"
+        android:textSize="16dp"
+        android:text="@string/assign"
+        />
+    
+</LinearLayout>
+
+</ScrollView>

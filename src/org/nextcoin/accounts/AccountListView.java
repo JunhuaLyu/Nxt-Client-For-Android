@@ -1,13 +1,10 @@
 package org.nextcoin.accounts;
 
-import java.net.URL;
 import java.util.LinkedList;
 
 import org.nextcoin.nxtclient.R;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -88,20 +85,20 @@ public class AccountListView extends ListView{
             holder.balance.setText(acct.getBalanceText());
             
             holder.img.setId(position);
-            holder.img.setImageResource(R.drawable.lock);
-            if ( null != acct.mImg ){
-                try {
-                    URL picUrl;
-                    if ( acct.mImg.startsWith("http://") )
-                        picUrl = new URL(acct.mImg);
-                    else
-                        picUrl = new URL("http://" + acct.mImg);
-                    Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream()); 
-                    holder.img.setImageBitmap(pngBM);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+//            holder.img.setImageResource(R.drawable.lock);
+//            if ( null != acct.mImg ){
+//                try {
+//                    URL picUrl;
+//                    if ( acct.mImg.startsWith("http://") )
+//                        picUrl = new URL(acct.mImg);
+//                    else
+//                        picUrl = new URL("http://" + acct.mImg);
+//                    Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream()); 
+//                    holder.img.setImageBitmap(pngBM);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
             
             holder.img.setOnClickListener(mUnlockOnClickListener);
             holder.img2.setId(position);

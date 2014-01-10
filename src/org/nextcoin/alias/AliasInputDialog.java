@@ -32,6 +32,7 @@ public class AliasInputDialog {
                 if ( name.length() > 0 ){
                     Alias alias = new Alias();
                     alias.mName = name;
+                    //Toast.makeText(mContext, "Checking alias:" + name, Toast.LENGTH_SHORT).show();
                     alias.loadAsyn(mAliasResponse);
                 }
             }})

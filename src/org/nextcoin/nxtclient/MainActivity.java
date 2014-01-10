@@ -7,6 +7,7 @@ import org.nextcoin.node.NodesActivity;
 import org.nextcoin.node.NodesManager;
 import org.nextcoin.pricetracker.PriceBar;
 import org.nextcoin.pricetracker.PriceTracker;
+import org.nextcoin.service.NxtBackgroudService;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -184,6 +186,12 @@ public class MainActivity extends Activity {
 
         if ( !Settings.sharedInstance().isShowingPrice(this) )
             priceBar.setVisibility(View.GONE);
+        
+//        Intent intent = new Intent(this, NxtBackgroudService.class);
+//        boolean err = bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+//        if ( !err ){
+//            Log.v("NxtBackgroudService", "bindService false");
+//        }
     }
     
     private Settings.SettingsChangeListener mSettingsChangeListener = new Settings.SettingsChangeListener(){
@@ -207,6 +215,7 @@ public class MainActivity extends Activity {
         AccountsManager.sharedInstance().release(this);
         AddressesManager.sharedInstance().release(this);
         mMainFunctionPage.release();
+        //unbindService(mConnection);
     }
 
     @Override
@@ -224,10 +233,43 @@ public class MainActivity extends Activity {
         super.onPause();
         mPriceTracker.stop();
     }
-    
+
+    //
+    //  Nxt Backgroud Service
+    //
+//    NxtBackgroudService mService;
+//    boolean mBound = false;
+//    private ServiceConnection mConnection = new ServiceConnection() {
+//
+//        @Override
+//        public void onServiceConnected(ComponentName className,
+//                IBinder service) {
+//            // We've bound to LocalService, cast the IBinder and get LocalService instance
+//            NxtBackgroudService.LocalBinder binder = (NxtBackgroudService.LocalBinder) service;
+//            mService = binder.getService();
+//            mBound = true;
+//            Log.v("LimitlessRemoteServer", "onServiceConnected");
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName arg0) {
+//            mBound = false;
+//            Log.v("LimitlessRemoteServer", "onServiceDisconnected");
+//        }
+//    };
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.activity_main, menu);
-        return false;
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item){
+        if ( R.id.menu_exit == item.getItemId() ){
+            Intent serviceIntent = new Intent(this, NxtBackgroudService.class);
+            this.stopService(serviceIntent);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

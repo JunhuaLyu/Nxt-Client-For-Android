@@ -21,6 +21,16 @@ public class AccountsManager {
         return mAccountList;
     }
     
+    public Account getAccount(String id){
+        if ( null == mAccountList )
+            return null;
+        for ( Account acc : mAccountList ){
+            if ( acc.mId.equals(id) )
+                return acc;
+        }
+        return null;
+    }
+    
     public void addAccount(Context context, String id, String tag){
         addAccount(context, id, tag, null);
     }

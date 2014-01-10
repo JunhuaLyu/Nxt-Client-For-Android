@@ -34,6 +34,12 @@ public class Alias {
             @Override
             public void onSuccess(String response) {
                 String strResult = response;
+                
+                if ( strResult.startsWith("{}") ){
+                    mUrl = "";
+                    mAliasResponse.onResult(RESULT_NO_ACC, Alias.this);
+                    return;
+                }
                 JSONObject jsonObj;
                 try {
                     jsonObj = new JSONObject(strResult);
@@ -51,16 +57,16 @@ public class Alias {
                             mAccountId = content;
                             mAliasResponse.onResult(RESULT_SUCCESS, Alias.this);
                         }else
-                            mAliasResponse.onResult(RESULT_NO_ACC, null);
+                            mAliasResponse.onResult(RESULT_NO_ACC, Alias.this);
                     }else{
-                        mAliasResponse.onResult(RESULT_NOT_EXIST, null);
+                        mAliasResponse.onResult(RESULT_NOT_EXIST, Alias.this);
                     }
                     return;
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
                 
-                mAliasResponse.onResult(RESULT_FAILED, null);
+                mAliasResponse.onResult(RESULT_NOT_EXIST, Alias.this);
             }
 
             @Override

@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.nextcoin.alias.Alias;
 import org.nextcoin.node.NodeContext;
@@ -89,6 +90,52 @@ public class Transaction {
             e.printStackTrace();
         }        
         return false;
+    }
+    
+    static public LinkedList<Transaction> getTransactionList(
+            NodeContext nodeContext, String accId, int timestamp){
+        String ip = null;
+        if ( nodeContext.isActive() )
+            ip = nodeContext.getIP();
+        else 
+            return null;
+        
+        String base_url = "http://" + ip + ":7874";
+        String httpUrl = String.format(
+                "%s/nxt?requestType=getAccountTransactionIds&account=%s&timestamp=%d", 
+                base_url, accId, timestamp);
+        try {
+            HttpURLConnection conn = (HttpURLConnection)new URL(httpUrl).openConnection();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuffer sb = new StringBuffer();
+            String line;
+            while((line = br.readLine()) != null)
+                sb.append(line);
+
+            String strResult = sb.toString();
+            JSONObject jsonObj;
+            try {
+                jsonObj = new JSONObject(strResult);
+                JSONArray jarray = jsonObj.getJSONArray("transactionIds");
+
+                LinkedList<Transaction> transactionList = new LinkedList<Transaction>();
+                for ( int i = 0; i < jarray.length(); ++ i ){
+                    String transactionId = jarray.getString(i);
+                    Transaction transaction = new Transaction();
+                    transaction.mId = transactionId;
+                    transactionList.add(transaction);
+                }
+
+                return transactionList;
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
     }
     
     static public void sortByTimestamp(LinkedList<Transaction> List){

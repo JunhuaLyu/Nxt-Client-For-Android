@@ -6,7 +6,6 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.json.JSONObject;
 import org.nextcoin.node.NodeContext;
 import org.nextcoin.node.NodesManager;
 import org.nextcoin.util.Crypto;
@@ -92,25 +91,27 @@ public class SendCoin {
                 sb.append(line);
 
             String strResult = sb.toString();
-            JSONObject jsonObj;
-            try {
-                jsonObj = new JSONObject(strResult);
-                String transaction = null;
-                String errInfo = null;
-                if (!jsonObj.isNull("transaction")){
-                    transaction = jsonObj.getString("transaction");
-                }
-                else
-                    errInfo = jsonObj.getString("errorDescription");
-
-                if ( null != transaction )
-                    mResponseListener.onResponse(true, transaction);
-                else
-                    mResponseListener.onResponse(false, errInfo);
-                return;
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+            mResponseListener.onResponse(true, strResult);
+            return;
+//            JSONObject jsonObj;
+//            try {
+//                jsonObj = new JSONObject(strResult);
+//                String transaction = null;
+//                String errInfo = null;
+//                if (!jsonObj.isNull("transaction")){
+//                    transaction = jsonObj.getString("transaction");
+//                }
+//                else
+//                    errInfo = jsonObj.getString("errorDescription");
+//
+//                if ( null != transaction )
+//                    mResponseListener.onResponse(true, transaction);
+//                else
+//                    mResponseListener.onResponse(false, errInfo);
+//                return;
+//            } catch (Exception e1) {
+//                e1.printStackTrace();
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }        

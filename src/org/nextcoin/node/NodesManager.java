@@ -57,6 +57,7 @@ public class NodesManager {
         mNodeIPList.remove(index);
         if ( 0 == mNodeIPList.size() ){
             mNodeIPList.add("121.199.12.227");
+            mNodeIPList.add("wallet.nxtarea.com");
             mNodeIPList.add("176.31.123.8");
         }
     }
@@ -92,6 +93,7 @@ public class NodesManager {
         
         if ( 0 == mNodeIPList.size() ){
             mNodeIPList.add("121.199.12.227");
+            mNodeIPList.add("wallet.nxtarea.com");
             mNodeIPList.add("176.31.123.8");
         }
     }
