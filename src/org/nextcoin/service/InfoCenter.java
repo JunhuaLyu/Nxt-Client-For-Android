@@ -51,6 +51,15 @@ public class InfoCenter {
         
         mAccountInfoList = accountInfoList;
     }
+    
+    public void init(){
+        NodeContext mNodeContext = NodesManager.sharedInstance().getCurrentNode();
+        LinkedList<Account> mAccountList = AccountsManager.sharedInstance().getAccountList();
+        if ( null == mNodeContext || null == mAccountList )
+            return;
+
+        setAccountList(mAccountList);
+    }
 
     public void refresh(Context context){
         NodeContext mNodeContext = NodesManager.sharedInstance().getCurrentNode();

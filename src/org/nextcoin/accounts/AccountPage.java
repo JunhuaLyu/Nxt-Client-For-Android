@@ -2,13 +2,16 @@ package org.nextcoin.accounts;
 
 import java.util.LinkedList;
 
+import org.Zxing.CaptureActivity;
 import org.nextcoin.alias.Alias;
 import org.nextcoin.alias.AliasInputDialog;
 import org.nextcoin.alias.AliasesActivity;
+import org.nextcoin.nxtclient.QRCodeParse;
 import org.nextcoin.nxtclient.R;
 import org.nextcoin.transactions.SendCoinsActivity;
 import org.nextcoin.transactions.TransactionsActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,6 +24,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.other.util.QRCode;
 
 public class AccountPage {
     private Context mContext;
@@ -63,11 +68,12 @@ public class AccountPage {
             }
         });
         
-        mItemOptions = new CharSequence[4];
+        mItemOptions = new CharSequence[5];
         mItemOptions[0] = mContext.getText(R.string.transactions);
         mItemOptions[1] = mContext.getText(R.string.aliases);
-        mItemOptions[2] = mContext.getText(R.string.edit);
-        mItemOptions[3] = mContext.getText(R.string.remove);
+        mItemOptions[2] = mContext.getText(R.string.qrcode);
+        mItemOptions[3] = mContext.getText(R.string.edit);
+        mItemOptions[4] = mContext.getText(R.string.remove);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         mAccountInputView = inflater.inflate(R.layout.account_input, null);
@@ -103,12 +109,19 @@ public class AccountPage {
         .setTitle(accountList.get(pos).mId)
         .setItems(mItemOptions, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if ( 3 == which ){
+                if ( 4 == which ){
                     AccountsManager.sharedInstance().removeAccount(mContext, mCurrentItemPos);
                     LinkedList<Account> accList = AccountsManager.sharedInstance().getAccountList();
                     mAccountListView.setAccountList(accList);
-                }else if (2 == which ){
+                }else if (3 == which ){
                     openAccountInputDialog(true, mCurrentItemPos);
+                }else if (2 == which ){
+                    Account acc = AccountsManager.sharedInstance().getAccountList().get(mCurrentItemPos);
+                    if ( null == acc.mTag || acc.mTag.equals("null") )
+                        QRCode.showQRCode((Activity)mContext, "nxtacct:" + acc.mId);
+                    else
+                        QRCode.showQRCode((Activity)mContext, 
+                                "nxtacct:" + acc.mId + "?label=" + acc.mTag);
                 }else if (1 == which ){
                     AliasesActivity.open(mContext, mCurrentItemPos);
                 }else if ( 0 == which ){
@@ -120,22 +133,51 @@ public class AccountPage {
     }
     
     private void openInputTypeSelectDialog(){
-        CharSequence options[] = new CharSequence[2];
+        CharSequence options[] = new CharSequence[3];
         options[0] = mContext.getText(R.string.add_by_alias);
         options[1] = mContext.getText(R.string.add_by_number);
+        options[2] = mContext.getText(R.string.qrcode_scan);
         
         new AlertDialog.Builder(mContext)
         .setTitle(R.string.add_account)
         .setItems(options, new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
-                if ( 1  == arg1 )
+                if ( 2  == arg1 )
+                    accountQRCodeScan();
+                else if ( 1  == arg1 )
                     openAccountInputDialog(false, 0);
                 else
                     openAliasInputDialog();
             }})
         .setNegativeButton(R.string.back, null)
         .show();
+    }
+    
+    private void accountQRCodeScan(){
+        //mContext.startActivity(new Intent(mContext, CaptureActivity.class));
+        CaptureActivity.startScanCode(mContext, new CaptureActivity.CodeReceiver() {
+            @Override
+            public boolean onResult(boolean success, String code) {
+                if ( success ){
+                    Account acc = QRCodeParse.genAccount(code);
+                    if ( null == acc ){
+                        String msg = (String) mContext.getText(R.string.qrcode_no_acc);
+                        msg += "   \r\n\r\n" + code;
+                        new AlertDialog.Builder(mContext)
+                                .setMessage(msg)
+                                .setNegativeButton(R.string.back, null)
+                                .show();
+                        return false;
+                    }
+                    AccountsManager.sharedInstance().addAccount(mContext, acc);
+                    update(AccountsManager.sharedInstance().getAccountList().getLast());
+                    return true;
+                }
+                
+                return false;
+            }
+        });
     }
     
     private void openAliasInputDialog(){

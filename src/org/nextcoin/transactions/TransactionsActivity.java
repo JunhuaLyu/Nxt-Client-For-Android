@@ -49,6 +49,8 @@ public class TransactionsActivity extends Activity {
         public void onResponse(boolean success, Account account, String info) {
             if ( success ){
                 loadTransactionsData();
+            }else{
+                dismissProgressDialog();
             }
         }
     };
@@ -362,6 +364,9 @@ public class TransactionsActivity extends Activity {
     private void openItemMenu(int pos){
         LinkedList<Transaction> transactionList = mAccount.mTransactionList;
         if ( null == transactionList || 0 == transactionList.size() )
+            return;
+        
+        if ( NxtTransaction.TYPE_PAYMENT != transactionList.get(pos).mType )
             return;
         
         String title;

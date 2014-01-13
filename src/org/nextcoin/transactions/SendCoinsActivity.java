@@ -6,6 +6,7 @@ import org.nextcoin.accounts.Account;
 import org.nextcoin.accounts.AccountsManager;
 import org.nextcoin.accounts.AccountsSelectDialog;
 import org.nextcoin.addresses.AddressesManager;
+import org.nextcoin.node.NodesManager;
 import org.nextcoin.nxtclient.R;
 import org.nextcoin.util.Vanity;
 
@@ -207,6 +208,7 @@ public class SendCoinsActivity extends Activity {
     @Override
     public void onResume(){
         super.onResume();
+        NodesManager.sharedInstance().getCurrentNode().updateAsync();
     }
 
     @Override

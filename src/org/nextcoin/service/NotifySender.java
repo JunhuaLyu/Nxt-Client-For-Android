@@ -15,6 +15,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class NotifySender {
     static Random mRandGen = new Random();
@@ -49,6 +50,7 @@ public class NotifySender {
                 contentIntent);
         
         notificationManager.notify(mRandGen.nextInt(), notification);
+        Log.v("Nxt Notification", info.mAccountId);
     }
     
     static private NotificationInfo getNotificationInfo(Context context, 
@@ -69,8 +71,8 @@ public class NotifySender {
                         context.getText(R.string.received), amount, 
                         context.getText(R.string.from), sender);
                 notificationInfo.mAccountId = myAccInfo.mId;
+                notificationInfo.mType = "ReceiveMoney";
 
-                
                 return notificationInfo;
             }
             // send money
@@ -86,6 +88,7 @@ public class NotifySender {
                         context.getText(R.string.sent), amount, 
                         context.getText(R.string.to), recipient);
                 notificationInfo.mAccountId = myAccInfo.mId;
+                notificationInfo.mType = "SendMoney";
 
                 return notificationInfo;
             }
@@ -100,6 +103,7 @@ public class NotifySender {
             notificationInfo.mTitle = (String) context.getText(R.string.alias_confirm);
             notificationInfo.mContent = String.format("Alias %s assigned success", alias.mName);
             notificationInfo.mAccountId = myAccInfo.mId;
+            notificationInfo.mType = "AliasAssign";
 
             return notificationInfo;
         }
@@ -110,5 +114,6 @@ public class NotifySender {
         public String mTitle;
         public String mContent;
         public String mAccountId;
+        public String mType;
     }
 }

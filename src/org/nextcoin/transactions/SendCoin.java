@@ -52,10 +52,16 @@ public class SendCoin {
     }
 
     private void send(String secret, String recipientStr, float amountF){
+        NodeContext nodeContext = NodesManager.sharedInstance().getCurrentNode();
+        if ( !nodeContext.isActive()){
+            mResponseListener.onResponse(false, null);
+            return;
+        }
         
         byte type = NxtTransaction.TYPE_PAYMENT;
         byte subtype = NxtTransaction.SUBTYPE_PAYMENT_ORDINARY_PAYMENT;
-        int timestamp = NxtUtil.getTimestamp() - 15;
+        //int timestamp = NxtUtil.getTimestamp() - 15;
+        int timestamp = nodeContext.getTimestamp();
         short deadline = 1500;
         byte[] senderPublicKey = Crypto.getPublicKey(secret);
         long recipient = new BigInteger(recipientStr).longValue();;
@@ -69,12 +75,6 @@ public class SendCoin {
         orgTransaction.sign(secret);
         String transactionBytes = NxtUtil.convert(orgTransaction.getBytes());
 
-        NodeContext nodeContext = NodesManager.sharedInstance().getCurrentNode();
-        if ( !nodeContext.isActive()){
-            mResponseListener.onResponse(false, null);
-            return;
-        }
-        
         String ip = nodeContext.getIP();
         String base_url = "http://" + ip + ":7874";
         String httpUrl = String.format(

@@ -16,6 +16,7 @@ public class Account {
 
     public Account(){
         mBalance = -1;
+        mTag = "null";
     }
     
     public String getBalanceText(){

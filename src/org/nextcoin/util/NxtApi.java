@@ -2,6 +2,7 @@ package org.nextcoin.util;
 
 import java.math.BigInteger;
 
+import org.nextcoin.node.NodesManager;
 import org.nextcoin.transactions.NxtTransaction;
 import org.nextcoin.transactions.NxtTransaction.MessagingAliasAssignmentAttachment;
 
@@ -17,7 +18,8 @@ public class NxtApi {
     static public NxtTransaction makeAliasTransaction(String secret, String alias, String uri, int fee, short deadline){
         byte type = NxtTransaction.TYPE_MESSAGING;
         byte subtype = NxtTransaction.SUBTYPE_MESSAGING_ALIAS_ASSIGNMENT;
-        int timestamp = NxtUtil.getTimestamp() - 15;
+        //int timestamp = NxtUtil.getTimestamp() - 15;
+        int timestamp = NodesManager.sharedInstance().getCurrentNode().getTimestamp();
         //short deadline = 1500;
         byte[] senderPublicKey = Crypto.getPublicKey(secret);
         long recipient = new BigInteger("1739068987193023818").longValue();;

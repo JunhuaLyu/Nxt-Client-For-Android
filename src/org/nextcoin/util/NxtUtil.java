@@ -44,4 +44,11 @@ public class NxtUtil {
       return localStringBuilder.toString();
     }
 
+    static public byte[] convert(String paramString) {
+        byte[] arrayOfByte = new byte[paramString.length() / 2];
+        for (int i = 0; i < arrayOfByte.length; i++)
+            arrayOfByte[i] = ((byte) Integer.parseInt(
+                    paramString.substring(i * 2, i * 2 + 2), 16));
+        return arrayOfByte;
+    }
 }

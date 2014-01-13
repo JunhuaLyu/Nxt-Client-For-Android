@@ -38,6 +38,7 @@ public class NxtBackgroudService extends IntentService{
         if ( null != mTicker )
             return;
 
+        InfoCenter.shardInstance().init();
         mTicker = new Ticker();
         //mTicker.start(60 * 10 * 1000, new Ticker.TickerResponse() {
         int interval = ToolsPage.getRefreshInterval(NxtBackgroudService.this)

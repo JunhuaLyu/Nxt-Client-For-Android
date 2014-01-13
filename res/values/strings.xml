@@ -1,9 +1,9 @@
 <resources>
 
-    <string name="app_name">NextCoin</string>
+    <string name="app_name">NXT</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">NextCoin</string>
+    <string name="title_activity_main">NXT</string>
 
     <string name="change">Change</string>
     <string name="change_node">Change node</string>
@@ -109,5 +109,9 @@
     <string name="alias_confirm">Alias assign confirmed</string>
     <string name="sent">Sent</string>
     <string name="to">to</string>
+
+    <string name="qrcode">QRCode</string>
+    <string name="qrcode_scan">QRCode scan</string>
+    <string name="qrcode_no_acc">QRCode doesn`t contain a Nxt account!</string>
     
 </resources>

@@ -1,9 +1,9 @@
 <resources>
 
-    <string name="app_name">NextCoin</string>
+    <string name="app_name">NXT</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">NextCoin</string>
+    <string name="title_activity_main">NXT</string>
 
     <string name="change">切换</string>
     <string name="change_node">切换节点</string>
@@ -109,4 +109,8 @@
     <string name="sent">发送</string>
     <string name="to">给</string>
     
+    <string name="qrcode">二维码</string>
+    <string name="qrcode_scan">扫描二维码</string>
+    <string name="qrcode_no_acc">该二维码并没有包含一个Nxt账号!</string>
+
 </resources>

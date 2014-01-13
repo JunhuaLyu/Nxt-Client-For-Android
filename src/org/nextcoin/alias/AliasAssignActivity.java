@@ -31,6 +31,12 @@ public class AliasAssignActivity extends Activity {
     private Button mBtnAssign;
     
     @Override
+    public void onResume(){
+        super.onResume();
+        NodesManager.sharedInstance().getCurrentNode().updateAsync();
+    }
+    
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alias_assign);

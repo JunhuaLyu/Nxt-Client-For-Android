@@ -41,7 +41,6 @@ public class MainActivity extends Activity {
         mChangeNodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //openChangeNodeDialog();
                 MainActivity.this.startActivityForResult(
                         new Intent(MainActivity.this, NodesActivity.class), REQUEST_CODE_NODES);
             }

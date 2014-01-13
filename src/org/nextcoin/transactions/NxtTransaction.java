@@ -9,6 +9,7 @@ import java.security.MessageDigest;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.nextcoin.util.Crypto;
+import org.nextcoin.util.NxtUtil;
 
 public class NxtTransaction {
 
@@ -154,7 +155,52 @@ public class NxtTransaction {
             return localJSONObject;
         }
     }
-    
+
+
+    public static class MessagingArbitraryMessageAttachment implements
+            NxtTransaction.Attachment, Serializable {
+        //static final long serialVersionUID = 0L;
+        final byte[] message;
+
+        public MessagingArbitraryMessageAttachment(byte[] paramArrayOfByte) {
+            this.message = paramArrayOfByte;
+        }
+
+        public int getSize() {
+            return 4 + this.message.length;
+        }
+
+        public byte[] getBytes() {
+            try {
+                ByteBuffer localByteBuffer = ByteBuffer.allocate(getSize());
+                localByteBuffer.order(ByteOrder.LITTLE_ENDIAN);
+                localByteBuffer.putInt(this.message.length);
+                localByteBuffer.put(this.message);
+                return localByteBuffer.array();
+            } catch (Exception localException) {
+            }
+            return null;
+        }
+
+        public JSONObject getJSONObject() {
+            JSONObject localJSONObject = new JSONObject();
+            try {
+                localJSONObject.put("message", NxtUtil.convert(this.message));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return localJSONObject;
+        }
+
+        public long getRecipientDeltaBalance() {
+            return 0L;
+        }
+
+        public long getSenderDeltaBalance() {
+            return 0L;
+        }
+    }
+
     static abstract interface Attachment
     {
       public abstract byte[] getBytes();

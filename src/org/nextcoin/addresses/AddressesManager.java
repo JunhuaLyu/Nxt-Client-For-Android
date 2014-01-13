@@ -50,6 +50,11 @@ public class AddressesManager {
         saveAccountList(context);
     }
     
+    public void addAccount(Context context, Account acct){
+        mAccountList.addLast(acct);
+        saveAccountList(context);
+    }
+    
     public void addAccount(Context context, Alias alias){
         Account acct = new Account();
         acct.mId = alias.mAccountId;

@@ -35,6 +35,11 @@ public class AccountsManager {
         addAccount(context, id, tag, null);
     }
     
+    public void addAccount(Context context, Account acct){
+        mAccountList.addLast(acct);
+        saveAccountList(context);
+    }
+    
     public void addAccount(Context context, String id, String tag, String img){
         if ( null == tag )
             tag = "null";

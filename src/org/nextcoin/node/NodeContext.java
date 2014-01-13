@@ -8,6 +8,8 @@ import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.other.util.HttpUtil;
@@ -76,6 +78,7 @@ public class NodeContext {
                         JSONObject jsonObj = new JSONObject(response);
                         mVersion = jsonObj.getString("version");
                         mTimestamp = jsonObj.getInt("time");
+                        Log.v("NodeContext", mIPStr + " time = " + mTimestamp);
                         String lastBlock = jsonObj.getString("lastBlock");
                         mBlocks = getBlockHeight(lastBlock);
                         mActive = true;
@@ -109,6 +112,7 @@ public class NodeContext {
                         jsonObj = new JSONObject(strResult);
                         mVersion = jsonObj.getString("version");
                         mTimestamp = jsonObj.getInt("time");
+                        Log.v("NodeContext", mIPStr + " time = " + mTimestamp);
                         String lastBlock = jsonObj.getString("lastBlock");
                         mBlocks = getBlockHeight(lastBlock);
                         mActive = true;

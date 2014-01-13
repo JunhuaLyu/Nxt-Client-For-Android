@@ -1,18 +1,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.nextcoin.nxtclient"
-    android:versionCode="500"
-    android:versionName="0.5.0" >
+    android:versionCode="502"
+    android:versionName="0.5.2" >
 
     <uses-sdk
-        android:minSdkVersion="7"
-        android:targetSdkVersion="7" />
+        android:minSdkVersion="8"
+        android:targetSdkVersion="8" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+<!--     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/> -->
     <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
 
     <application
         android:icon="@drawable/logo3"
@@ -47,11 +53,11 @@
         <service android:name="org.nextcoin.service.NxtBackgroudService" >
         </service>
 
-        <receiver android:name="com.jhlv.Util.AutoRunBroadcastReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+<!--         <receiver android:name="com.jhlv.Util.AutoRunBroadcastReceiver" > -->
+<!--             <intent-filter> -->
+<!--                 <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
+<!--             </intent-filter> -->
+<!--         </receiver> -->
 
         <activity
             android:name="org.nextcoin.transactions.TransactionsActivity"
@@ -87,6 +93,12 @@
             android:name="org.nextcoin.alias.AliasAssignActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+
+        <activity android:name="org.Zxing.CaptureActivity"
+            android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         
     </application>
