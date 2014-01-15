@@ -1,6 +1,8 @@
 package org.nextcoin.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
@@ -30,6 +32,13 @@ public class NxtUtil {
 
         stamp = ( stamp + 500 ) / 1000;
         return (int)stamp;
+    }
+    
+    static public String getDate(int timestamp){
+        long start = NxtUtil.getStartTime() + ((long)timestamp) * 1000;
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = new Date(start);
+        return df.format(date);
     }
 
     static public String convert(byte[] paramArrayOfByte)

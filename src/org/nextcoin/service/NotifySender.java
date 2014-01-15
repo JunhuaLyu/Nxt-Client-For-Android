@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.nextcoin.addresses.AddressesManager;
 import org.nextcoin.alias.Alias;
+import org.nextcoin.message.MessageActivity;
 import org.nextcoin.nxtclient.R;
 import org.nextcoin.nxtclient.Settings;
 import org.nextcoin.transactions.NxtTransaction;
@@ -40,7 +41,12 @@ public class NotifySender {
             notification.defaults = Notification.DEFAULT_VIBRATE;
         }
         
-        Intent notificationIntent = new Intent(context, TransactionsActivity.class);
+        Intent notificationIntent;
+        if ( info.mType.equals("Message") )
+            notificationIntent = new Intent(context, MessageActivity.class);
+        else
+            notificationIntent = new Intent(context, TransactionsActivity.class);
+
         notificationIntent.putExtra("AccountId", info.mAccountId);
         notificationIntent.putExtra("TransactionId", transaction.mId);
 
@@ -55,58 +61,90 @@ public class NotifySender {
     
     static private NotificationInfo getNotificationInfo(Context context, 
             Transaction transaction, InfoCenter.AccountInfo myAccInfo){
-        // ORDINARY_PAYMENT
-        if ( NxtTransaction.TYPE_PAYMENT == transaction.mType 
-                && NxtTransaction.SUBTYPE_PAYMENT_ORDINARY_PAYMENT == transaction.mSubType ){
-            // receive money
-            if ( transaction.mRecipient.equals(myAccInfo.mId) ){
-                NotificationInfo notificationInfo = new NotificationInfo();
-                
-                String sender = AddressesManager.sharedInstance().getTag(transaction.mSender);
-                if ( null == sender || sender.equals(" ") )
-                    sender = transaction.mSender;
-                int amount = (int)transaction.mAmount;
-                notificationInfo.mTitle = (String) context.getText(R.string.new_transaction);
-                notificationInfo.mContent = String.format("%s %d Nxt, %s %s", 
-                        context.getText(R.string.received), amount, 
-                        context.getText(R.string.from), sender);
-                notificationInfo.mAccountId = myAccInfo.mId;
-                notificationInfo.mType = "ReceiveMoney";
+        try{
+            // ORDINARY_PAYMENT
+            if ( NxtTransaction.TYPE_PAYMENT == transaction.mType 
+                    && NxtTransaction.SUBTYPE_PAYMENT_ORDINARY_PAYMENT == transaction.mSubType ){
+                // receive money
+                if ( transaction.mRecipient.equals(myAccInfo.mId) ){
+                    NotificationInfo notificationInfo = new NotificationInfo();
+                    
+                    String sender = AddressesManager.sharedInstance().getTag(transaction.mSender);
+                    if ( null == sender || sender.equals(" ") )
+                        sender = transaction.mSender;
+                    int amount = (int)transaction.mAmount;
+                    notificationInfo.mTitle = (String) context.getText(R.string.new_transaction);
+                    notificationInfo.mContent = String.format("%s %d Nxt, %s %s", 
+                            context.getText(R.string.received), amount, 
+                            context.getText(R.string.from), sender);
+                    notificationInfo.mAccountId = myAccInfo.mId;
+                    notificationInfo.mType = "ReceiveMoney";
 
-                return notificationInfo;
+                    return notificationInfo;
+                }
+                // send money
+                else{
+                    NotificationInfo notificationInfo = new NotificationInfo();
+                    
+                    String recipient = AddressesManager.sharedInstance().getTag(transaction.mRecipient);
+                    if ( null == recipient || recipient.equals(" ") )
+                        recipient = transaction.mRecipient;
+                    int amount = (int)transaction.mAmount;
+                    notificationInfo.mTitle = (String) context.getText(R.string.transaction_confirm);
+                    notificationInfo.mContent = String.format("%s %d Nxt, %s %s", 
+                            context.getText(R.string.sent), amount, 
+                            context.getText(R.string.to), recipient);
+                    notificationInfo.mAccountId = myAccInfo.mId;
+                    notificationInfo.mType = "SendMoney";
+
+                    return notificationInfo;
+                }
             }
-            // send money
-            else{
-                NotificationInfo notificationInfo = new NotificationInfo();
-                
-                String recipient = AddressesManager.sharedInstance().getTag(transaction.mRecipient);
-                if ( null == recipient || recipient.equals(" ") )
-                    recipient = transaction.mRecipient;
-                int amount = (int)transaction.mAmount;
-                notificationInfo.mTitle = (String) context.getText(R.string.transaction_confirm);
-                notificationInfo.mContent = String.format("%s %d Nxt, %s %s", 
-                        context.getText(R.string.sent), amount, 
-                        context.getText(R.string.to), recipient);
-                notificationInfo.mAccountId = myAccInfo.mId;
-                notificationInfo.mType = "SendMoney";
+            else if ( NxtTransaction.TYPE_MESSAGING == transaction.mType ){
+                // alias assign
+                if (NxtTransaction.SUBTYPE_MESSAGING_ALIAS_ASSIGNMENT == transaction.mSubType){
+                    NotificationInfo notificationInfo = new NotificationInfo();
+                    Alias alias = (Alias)transaction.mAttachment;
+                    notificationInfo.mTitle = (String) context.getText(R.string.alias_confirm);
+                    notificationInfo.mContent = String.format("Alias %s assigned success", alias.mName);
+                    notificationInfo.mAccountId = myAccInfo.mId;
+                    notificationInfo.mType = "AliasAssign";
+                    return notificationInfo;
+                }
+                // arbitrary message
+                else if (NxtTransaction.SUBTYPE_MESSAGING_ARBITRARY_MESSAGE == transaction.mSubType){
+                    NotificationInfo notificationInfo = new NotificationInfo();
+                    //ArbitraryMessage msg = (ArbitraryMessage)transaction.mAttachment;
+                    notificationInfo.mAccountId = myAccInfo.mId;
+                    notificationInfo.mType = "Message";
+                    // receive message
+                    if ( transaction.mRecipient.equals(myAccInfo.mId) ){
+                        notificationInfo.mTitle = (String) context.getText(R.string.new_message);
+                        String sender = AddressesManager.sharedInstance().getTag(transaction.mSender);
+                        if ( null == sender || sender.equals(" ") )
+                            sender = transaction.mSender;
+                        
+                        notificationInfo.mContent = String.format("%s %s.", 
+                                context.getText(R.string.from), sender);
+                    }
+                    // sent message confirm
+                    else{
+                        notificationInfo.mTitle = (String) context.getText(R.string.message_confirm);
+                        String recipient = AddressesManager.sharedInstance().getTag(transaction.mRecipient);
+                        if ( null == recipient || recipient.equals(" ") )
+                            recipient = transaction.mRecipient;
 
-                return notificationInfo;
+                        notificationInfo.mContent = String.format("%s %s", 
+                                context.getText(R.string.to), recipient);
+                    }
+                    
+                    return notificationInfo;
+                }
             }
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        // alias assign
-        else if ( NxtTransaction.TYPE_MESSAGING == transaction.mType 
-                && NxtTransaction.SUBTYPE_MESSAGING_ALIAS_ASSIGNMENT == transaction.mSubType ){
-            NotificationInfo notificationInfo = new NotificationInfo();
-            
-            Alias alias = (Alias)transaction.mAttachment;
-            
-            notificationInfo.mTitle = (String) context.getText(R.string.alias_confirm);
-            notificationInfo.mContent = String.format("Alias %s assigned success", alias.mName);
-            notificationInfo.mAccountId = myAccInfo.mId;
-            notificationInfo.mType = "AliasAssign";
 
-            return notificationInfo;
-        }
         return null;
     }
 

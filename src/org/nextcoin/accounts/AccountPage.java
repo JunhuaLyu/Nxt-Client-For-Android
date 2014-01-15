@@ -6,6 +6,7 @@ import org.Zxing.CaptureActivity;
 import org.nextcoin.alias.Alias;
 import org.nextcoin.alias.AliasInputDialog;
 import org.nextcoin.alias.AliasesActivity;
+import org.nextcoin.message.MessageActivity;
 import org.nextcoin.nxtclient.QRCodeParse;
 import org.nextcoin.nxtclient.R;
 import org.nextcoin.transactions.SendCoinsActivity;
@@ -68,12 +69,13 @@ public class AccountPage {
             }
         });
         
-        mItemOptions = new CharSequence[5];
+        mItemOptions = new CharSequence[6];
         mItemOptions[0] = mContext.getText(R.string.transactions);
-        mItemOptions[1] = mContext.getText(R.string.aliases);
-        mItemOptions[2] = mContext.getText(R.string.qrcode);
-        mItemOptions[3] = mContext.getText(R.string.edit);
-        mItemOptions[4] = mContext.getText(R.string.remove);
+        mItemOptions[1] = mContext.getText(R.string.arbitrary_message);
+        mItemOptions[2] = mContext.getText(R.string.aliases);
+        mItemOptions[3] = mContext.getText(R.string.qrcode);
+        mItemOptions[4] = mContext.getText(R.string.edit);
+        mItemOptions[5] = mContext.getText(R.string.remove);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         mAccountInputView = inflater.inflate(R.layout.account_input, null);
@@ -109,21 +111,24 @@ public class AccountPage {
         .setTitle(accountList.get(pos).mId)
         .setItems(mItemOptions, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if ( 4 == which ){
+                if ( 5 == which ){
                     AccountsManager.sharedInstance().removeAccount(mContext, mCurrentItemPos);
                     LinkedList<Account> accList = AccountsManager.sharedInstance().getAccountList();
                     mAccountListView.setAccountList(accList);
-                }else if (3 == which ){
+                }else if (4 == which ){
                     openAccountInputDialog(true, mCurrentItemPos);
-                }else if (2 == which ){
+                }else if (3 == which ){
                     Account acc = AccountsManager.sharedInstance().getAccountList().get(mCurrentItemPos);
                     if ( null == acc.mTag || acc.mTag.equals("null") )
                         QRCode.showQRCode((Activity)mContext, "nxtacct:" + acc.mId);
                     else
                         QRCode.showQRCode((Activity)mContext, 
                                 "nxtacct:" + acc.mId + "?label=" + acc.mTag);
-                }else if (1 == which ){
+                }else if (2 == which ){
                     AliasesActivity.open(mContext, mCurrentItemPos);
+                }else if (1 == which ){
+                    Account acc = AccountsManager.sharedInstance().getAccountList().get(mCurrentItemPos);
+                    MessageActivity.open(mContext, acc.mId);
                 }else if ( 0 == which ){
                     TransactionsActivity.open(mContext, mCurrentItemPos);
                 }

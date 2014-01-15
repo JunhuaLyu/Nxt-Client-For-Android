@@ -23,7 +23,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/logo2"
+            android:background="@drawable/logo3"
             />
 
         <View 

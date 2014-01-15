@@ -113,7 +113,7 @@
             android:layout_height="36dp"
             android:textSize="14dp"
             android:inputType="number"
-            android:text="1"
+            android:text="24"
             />
         
     </LinearLayout>

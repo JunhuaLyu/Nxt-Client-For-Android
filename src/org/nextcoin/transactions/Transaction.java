@@ -14,7 +14,6 @@ import org.nextcoin.alias.Alias;
 import org.nextcoin.message.ArbitraryMessage;
 import org.nextcoin.node.NodeContext;
 import org.nextcoin.node.NodesManager;
-import org.nextcoin.util.NxtUtil;
 
 public class Transaction {
     public boolean mLoaded = false;
@@ -85,8 +84,10 @@ public class Transaction {
                         JSONObject jsonMsg = jsonObj.getJSONObject("attachment");
                         if ( jsonMsg.has("message") ){
                             String str = jsonMsg.getString("message");
-                            ArbitraryMessage msg = new ArbitraryMessage(NxtUtil.convert(str));
+                            ArbitraryMessage msg = new ArbitraryMessage(str);
                             transaction.mAttachment  = msg;
+                            transaction.mRecipient = jsonObj.getString("recipient");
+                            transaction.mSender = jsonObj.getString("sender");
                         }
                     }
                 }

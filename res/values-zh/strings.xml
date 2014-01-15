@@ -112,5 +112,14 @@
     <string name="qrcode">二维码</string>
     <string name="qrcode_scan">扫描二维码</string>
     <string name="qrcode_no_acc">该二维码并没有包含一个Nxt账号!</string>
-
+    
+    <string name="message">消息</string>
+    <string name="messages">消息</string>
+    <string name="arbitrary_message">消息</string>
+    <string name="new_message">新消息</string>
+    <string name="message_confirm">消息发送确认</string>
+    <string name="send_message">发送消息</string>
+    <string name="encrypt_message">消息加密</string>
+    <string name="msg_input_hint">请输入内容</string>
+    
 </resources>

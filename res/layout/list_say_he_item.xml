@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="60dip"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/messagegedetail_rov_icon"
+        android:layout_width="42px"
+        android:layout_height="42px"
+        android:layout_gravity="bottom"
+        android:background="@drawable/retouxiang"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/messagedetail_row_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:textColor="#0000DD"
+        android:background="@drawable/incoming"
+        android:textSize="16dip" />
+
+    <TextView
+        android:id="@+id/messagedetail_row_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:textColor="#444"
+        android:textSize="14dip" />
+    
+</LinearLayout>

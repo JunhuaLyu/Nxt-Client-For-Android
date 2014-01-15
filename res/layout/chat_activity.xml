@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffbbbbbb"
+    android:orientation="vertical" >
+
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:background="#bbb"
+        >
+        
+        <View 
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/message"
+            />
+
+        <LinearLayout 
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:background="@drawable/incoming"
+            >
+
+            <TextView android:id="@+id/textview_label"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="yueye"
+                android:textColor="#226"
+                android:textSize="16dp"
+                />
+            
+            <TextView android:id="@+id/textview_account_id"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="11614711640397236492"
+                android:textColor="#000"
+                android:textSize="15dp"
+                />
+            
+        </LinearLayout>
+        
+        <View 
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            />
+        
+    </LinearLayout>
+        
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:background="#ddd"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/edit_message"
+            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/msg_input_hint"
+            android:layout_weight="0.1"
+            android:textSize="18dip" />
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_marginTop="10dp"
+            android:layout_width="70dp"
+            android:layout_height="50dip"
+            android:text="@string/send"
+            android:textSize="14dip" />
+        
+    </LinearLayout>    
+
+</LinearLayout>

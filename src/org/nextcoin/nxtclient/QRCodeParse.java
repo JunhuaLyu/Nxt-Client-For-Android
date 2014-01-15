@@ -6,8 +6,8 @@ import org.nextcoin.accounts.Account;
 
 public class QRCodeParse {
     static private String getAddress(String code){
-        code = code.toLowerCase();
-        if ( code.startsWith("nxtacct:") ){
+        String codeLowerCase = code.toLowerCase();
+        if ( codeLowerCase.startsWith("nxtacct:") ){
             int index = code.indexOf('?');
             if ( index < 0 )
                 return code.substring("nxtacct:".length());
@@ -18,7 +18,7 @@ public class QRCodeParse {
     }
     
     static private HashMap<String, String> getParams(String code){
-        code = code.toLowerCase();
+        //code = code.toLowerCase();
         int index = code.indexOf('?');
         if ( index < 0 )
             return null;

@@ -113,22 +113,32 @@ public class AccountsInfoHelper {
         if ( nodeContext.isActive() )
             ip = nodeContext.getIP();
         
-        getTransactionHistory(ip, account, mTransactionResponseListener, days);
-    }
-
-    private ResponseListener mTransactionResponse;
-    private Account mTransactionAccount;
-    private void getTransactionHistory(String ip, Account account, ResponseListener listener, int days){
-        mTransactionResponse = listener;
-        mTransactionAccount = account;
-        if ( null == ip )
-            mTransactionResponse.onResponse(false, account, null);
-
         int timestamp = NodesManager.sharedInstance().getCurrentNode().getTimestamp();
         if ( 0 == days )
             timestamp = 0;
         else
             timestamp -= days * 24 * 60 * 60;
+        
+        getTransactionHistory(ip, account, mTransactionResponseListener, timestamp);
+    }
+
+    public void requestTransactionHistoryWithTimestamp(Account account, ResponseListener listener, int timestamp){
+        mTransactionResponseListener = listener;
+        NodeContext nodeContext = NodesManager.sharedInstance().getCurrentNode();
+        String ip = null;
+        if ( nodeContext.isActive() )
+            ip = nodeContext.getIP();
+        
+        getTransactionHistory(ip, account, mTransactionResponseListener, timestamp);
+    }
+
+    private ResponseListener mTransactionResponse;
+    private Account mTransactionAccount;
+    private void getTransactionHistory(String ip, Account account, ResponseListener listener, int timestamp){
+        mTransactionResponse = listener;
+        mTransactionAccount = account;
+        if ( null == ip )
+            mTransactionResponse.onResponse(false, account, null);
 
         String base_url = "http://" + ip + ":7874";
         String httpUrl = String.format(

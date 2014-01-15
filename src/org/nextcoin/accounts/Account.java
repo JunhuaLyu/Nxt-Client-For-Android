@@ -19,6 +19,16 @@ public class Account {
         mTag = "null";
     }
     
+    @Override
+    public Account clone(){
+        Account acct = new Account();
+        acct.mId = mId;
+        acct.mTag = mTag;
+        acct.mBalance = mBalance;
+        acct.mUnconfirmedBalance = mUnconfirmedBalance;
+        return acct;
+    }
+
     public String getBalanceText(){
         if ( mBalance < 0 )
             return "";
