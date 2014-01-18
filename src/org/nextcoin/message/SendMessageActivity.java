@@ -6,8 +6,10 @@ import org.nextcoin.accounts.Account;
 import org.nextcoin.accounts.AccountsManager;
 import org.nextcoin.accounts.AccountsSelectDialog;
 import org.nextcoin.addresses.AddressesManager;
+import org.nextcoin.message.MessagesData.NxtMessage;
 import org.nextcoin.node.NodesManager;
 import org.nextcoin.nxtclient.R;
+import org.nextcoin.nxtclient.SafeBox;
 import org.nextcoin.transactions.NxtTransaction;
 import org.nextcoin.util.NxtApi;
 import org.nextcoin.util.Vanity;
@@ -84,19 +86,20 @@ public class SendMessageActivity extends Activity {
         mEditTextMessage.setText(intent.getStringExtra("content"));
 
         mCheckEncrypt = (CheckBox)this.findViewById(R.id.check_encrypt);
-        mCheckEncrypt.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView,
-                    boolean isChecked) {
-                if ( isChecked ){
-                    new AlertDialog.Builder(SendMessageActivity.this)
-                            .setTitle(R.string.encrypt_message)
-                            .setMessage(R.string.in_development)
-                            .setNegativeButton(R.string.back, null)
-                            .show();
-                    mCheckEncrypt.setChecked(false);
-                }
-            }});
+        mCheckEncrypt.setChecked(true);
+//        mCheckEncrypt.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView,
+//                    boolean isChecked) {
+//                if ( isChecked ){
+//                    new AlertDialog.Builder(SendMessageActivity.this)
+//                            .setTitle(R.string.encrypt_message)
+//                            .setMessage(R.string.in_development)
+//                            .setNegativeButton(R.string.back, null)
+//                            .show();
+//                    mCheckEncrypt.setChecked(false);
+//                }
+//            }});
 
         CheckBox checkVisable = (CheckBox)this.findViewById(R.id.check_visable);
         checkVisable.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
@@ -123,9 +126,25 @@ public class SendMessageActivity extends Activity {
                 String message = mEditTextMessage.getText().toString();
                 
                 if ( checkTransaction(secret, recipient, (float)1.0) ){
+                    byte[] msgData;
+                    // encrypt
+                    if ( mCheckEncrypt.isChecked() ){
+                        byte[] publicKey = SafeBox.sharedInstance().getPublicKey(recipient);
+                        if ( null == publicKey ){
+                            new AlertDialog.Builder(SendMessageActivity.this)
+                                    .setTitle(recipient)
+                                    .setMessage(R.string.no_publickey)
+                                    .setNegativeButton(R.string.back, null)
+                                    .show();
+                            return;
+                        }
+                        msgData = NxtMessage.encryptMessage(message, secret, publicKey);
+                    }else
+                        // plain text
+                        msgData = message.getBytes();
                     // sign transaction
                     NxtTransaction transaction = NxtApi.makeArbitraryMessageTransaction(
-                            secret, recipient, message, (short)1440);
+                            secret, recipient, msgData, (short)1440);
                     
                     // broadcast transaction
                     String addr = NodesManager.sharedInstance().getCurrentNode().getIP();

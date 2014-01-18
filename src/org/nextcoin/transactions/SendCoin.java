@@ -78,7 +78,7 @@ public class SendCoin {
         String ip = nodeContext.getIP();
         String base_url = "http://" + ip + ":7874";
         String httpUrl = String.format(
-                "%s/nxt?requestType=broadcastTransaction&&transactionBytes=%s", 
+                "%s/nxt?requestType=broadcastTransaction&transactionBytes=%s", 
                 base_url, transactionBytes);
 
         try {

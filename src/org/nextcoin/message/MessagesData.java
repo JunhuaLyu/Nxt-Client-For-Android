@@ -1,9 +1,13 @@
 package org.nextcoin.message;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 
+import org.nextcoin.nxtclient.SafeBox;
+import org.nextcoin.util.Crypto;
 import org.nextcoin.util.NxtUtil;
 
 import android.content.ContentValues;
@@ -22,15 +26,35 @@ public class MessagesData {
         public String mRecipient;
         public String mHex;
         public int mTimestamp;
+        public boolean mIsEncrypted;
+        public String mText;
+        
         public NxtMessage(String id, String sender, String recipient, String hex, int timestamp){
             mId = id;
             mHex = hex;
             mSender = sender;
             mRecipient = recipient;
             mTimestamp = timestamp;
+            
+            if ( hex.length() > 16 ){
+                ByteBuffer buffer = ByteBuffer.wrap(NxtUtil.convert(hex));
+                buffer.order(ByteOrder.LITTLE_ENDIAN);
+                byte[] head = new byte[4];
+                buffer.get(head);
+                int len = buffer.getInt();
+                if ( EncryptHead.equals(new String(head)) &&  len == hex.length() / 2 )
+                    mIsEncrypted  = true;
+            }else
+                mIsEncrypted  = false;
         }
         
         public String getText(){
+            if ( null != mText )
+                return mText;
+            
+            if ( mIsEncrypted )
+                return "**Encrypted**";
+            
             String text = null;
             try {
                 text = new String(NxtUtil.convert(mHex), "UTF-8");
@@ -38,6 +62,47 @@ public class MessagesData {
                 e.printStackTrace();
             }
             return text;
+        }
+        
+        static final private String EncryptHead = "NE*#";
+        static public byte[] encryptMessage(String message, String senderSecret, byte[] recipientKey){
+            byte[] data = Crypto.encodeMessage(message, senderSecret, recipientKey);
+            ByteBuffer buff = ByteBuffer.allocate(data.length + 8);
+            buff.order(ByteOrder.LITTLE_ENDIAN);
+            buff.put(EncryptHead.getBytes());
+            buff.putInt(data.length + 8);
+            buff.put(data);
+            
+            return buff.array();
+        }
+    }
+    
+    static public void decodeMessage(NxtMessage message, String myAccountID){
+        
+    }
+    
+    static public void decodeMessage(LinkedList<NxtMessage> list, String myAccountID){
+        String secret = SafeBox.sharedInstance().getSecret(myAccountID);
+        if ( null == secret )
+            return;
+        
+        for ( NxtMessage message : list ){
+            if ( message.mIsEncrypted && null == message.mText){
+                byte[] data  = NxtUtil.convert(message.mHex.substring(16));
+                String othersAccount;
+                if ( message.mSender.equals(myAccountID) ){
+                    othersAccount = message.mRecipient;
+                }else if ( message.mRecipient.equals(myAccountID) ){
+                    othersAccount = message.mSender;
+                }
+                else continue;
+                
+                byte[] othersKey = SafeBox.sharedInstance().getPublicKey(othersAccount);
+                if ( othersKey == null )
+                    continue;
+                
+                message.mText = Crypto.decodeMessage(data, secret, othersKey);
+            }
         }
     }
     

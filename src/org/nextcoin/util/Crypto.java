@@ -4,6 +4,48 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 public class Crypto {
+//    static public void test2() throws Exception{
+//        String senderSecret = "12334";
+//        byte[] senderPrivate = MessageDigest.getInstance("SHA-256").digest(senderSecret.getBytes("UTF-8"));
+//        //Log.v("Crypto", "senderPrivate = " + NxtUtil.convert(senderPrivate));
+//        byte[] senderKey = new byte[32];
+//        Curve25519.keygen(senderKey, null, senderPrivate);
+//
+//        String recipientSecret = "123345";
+//        byte[] recipientPrivate = MessageDigest.getInstance("SHA-256")
+//                .digest(recipientSecret.getBytes("UTF-8"));
+//        byte[] recipientKey = new byte[32];
+//        Curve25519.keygen(recipientKey, null, recipientPrivate);
+//
+//        byte[] sharedSecret = new byte[32];
+//        //Log.v("Crypto", "senderKey = " + NxtUtil.convert(senderKey));
+//        //Log.v("Crypto", "recipientKey = " + NxtUtil.convert(recipientKey));
+//        Curve25519.curve(sharedSecret, senderPrivate, recipientKey);
+//        //Log.v("Crypto", "sharedSecret = " + NxtUtil.convert(sharedSecret));
+//        byte[] sharedSecret1 = new byte[32];
+//        Curve25519.curve(sharedSecret1, recipientPrivate, senderKey);
+//        //Log.v("Crypto", NxtUtil.convert(sharedSecret1));
+//    }
+
+//    static public void test(){
+//        try {
+//            test2();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        String senderSecret = "12334";
+//        byte[] senderKey = Crypto.getPublicKey(senderSecret);
+//        //Log.v("Crypto", "senderKey = " + NxtUtil.convert(senderKey));
+//        
+//        String recipientSecret = "123345";
+//        byte[] recipientKey = Crypto.getPublicKey(recipientSecret);
+//        
+//        String text = "my secret";
+//        byte[] encode = encodeMessage(text, senderSecret, recipientKey);
+//        
+//        String decode = decodeMessage(encode, recipientSecret, senderKey);
+//        Log.v("Crypto", decode);
+//    }
     
     static public byte[] getPublicKey(String secretPhrase) {
         
@@ -75,6 +117,70 @@ public class Crypto {
         }
     }
 
+    static public byte[] encodeMessage(String message, String senderSecret, byte[] recipientKey){
+        try {
+            byte[] senderPrivate = MessageDigest.getInstance("SHA-256").digest(senderSecret.getBytes("UTF-8"));
+            byte[] senderKey = new byte[32];
+            Curve25519.keygen(senderKey, null, senderPrivate);
+
+            byte[] sharedSecret = new byte[32];
+            Curve25519.curve(sharedSecret, senderPrivate, recipientKey);
+
+            byte[] plainText = message.getBytes("UTF-8");
+            byte[] cipherText = new byte[plainText.length];
+            byte[] seed = MessageDigest.getInstance("SHA-256").digest(sharedSecret);
+            int n = plainText.length;
+            int index = 0;
+            while( n > 0 ){
+                int len = n > 32 ? 32 : n;
+                for ( int i = 0; i < len; ++ i ){
+                    cipherText[index + i] = (byte) (plainText[index + i] ^ seed[i]);
+                }
+                n -= len;
+                index += len;
+                seed = MessageDigest.getInstance("SHA-256").digest(seed);
+            }
+
+            return cipherText;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        
+        return null;
+    }
+    
+    static public String decodeMessage(byte[] encodeData,  String recipientSecret, byte[] senderKey){
+        try {
+            byte[] recipientPrivate = MessageDigest.getInstance("SHA-256")
+                    .digest(recipientSecret.getBytes("UTF-8"));
+            byte[] recipientKey = new byte[32];
+            Curve25519.keygen(recipientKey, null, recipientPrivate);
+
+            byte[] sharedSecret = new byte[32];
+            Curve25519.curve(sharedSecret, recipientPrivate, senderKey);
+
+            byte[] decodeText = new byte[encodeData.length];
+            byte[] seed = MessageDigest.getInstance("SHA-256").digest(sharedSecret);
+            int n = encodeData.length;
+            int index = 0;
+            while( n > 0 ){
+                int len = n > 32 ? 32 : n;
+                for ( int i = 0; i < len; ++ i ){
+                    decodeText[index + i] = (byte) (encodeData[index + i] ^ seed[i]);
+                }
+                n -= len;
+                index += len;
+                seed = MessageDigest.getInstance("SHA-256").digest(seed);
+            }
+
+            return new String(decodeText);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
 
 }
 

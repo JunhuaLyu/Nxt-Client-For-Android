@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.nextcoin.accounts.Account;
+import org.nextcoin.accounts.AccountUnlockDialog;
 import org.nextcoin.accounts.AccountsInfoHelper;
 import org.nextcoin.accounts.AccountsManager;
 import org.nextcoin.message.MessagesData.NxtMessage;
 import org.nextcoin.nxtclient.R;
+import org.nextcoin.nxtclient.SafeBox;
 import org.nextcoin.transactions.NxtTransaction;
 import org.nextcoin.transactions.Transaction;
 import org.nextcoin.util.NxtUtil;
@@ -21,8 +23,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.other.util.ProgressDialogExt;
 
@@ -115,13 +119,20 @@ public class MessageActivity extends Activity {
         }
 
         MessagesData.sortByTimestamp(mMessageList);
+        decodeMessages();
         mMessageListView.setMessageList(mMessageList);
         mMessageListView.setMessageCounts(msgCountMap);
         mMessageListView.notifyDataSetChanged();
     }
     
+    private void decodeMessages(){
+        if ( null != mMessageList )
+            MessagesData.decodeMessage(mMessageList, mAccount.mId);
+    }
+
     private MessageListView mMessageListView;
     private Account mAccount;
+    private ImageView mImgUnlock;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,6 +161,29 @@ public class MessageActivity extends Activity {
             }
         });
         
+        mImgUnlock = (ImageView) this.findViewById(R.id.img_lock);
+        mImgUnlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( !SafeBox.sharedInstance().isUnlock(mAccount.mId) ){
+                    new AccountUnlockDialog().openUnlockDialog(MessageActivity.this, mAccount.mId, 
+                            new AccountUnlockDialog.ResponseListener() {
+                        @Override
+                        public void onResponse(boolean success, String info) {
+                            if ( success ){
+                                updateUI();
+                            }else{
+                                Toast.makeText(MessageActivity.this, info, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }else{
+                    SafeBox.sharedInstance().lock(mAccount.mId);
+                    updateUI();
+                }
+            }
+        });
+        
         mMessageListView = (MessageListView)this.findViewById(R.id.listview_message);
         mMessageListView.setAccount(mAccount);
         mMessageListView.setOnItemClickListener(new ListView.OnItemClickListener(){
@@ -172,6 +206,16 @@ public class MessageActivity extends Activity {
         if ( timestamp < 0 )
             timestamp = 0;
         transactionsRequest(timestamp);
+        updateUI();
+    }
+    
+    private void updateUI(){
+        decodeMessages();
+        if ( SafeBox.sharedInstance().isUnlock(mAccount.mId) )
+            mImgUnlock.setImageResource(R.drawable.unlock);
+        else
+            mImgUnlock.setImageResource(R.drawable.lock);
+        mMessageListView.notifyDataSetChanged();
     }
 
     /**

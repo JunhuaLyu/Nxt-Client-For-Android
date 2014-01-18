@@ -2,6 +2,7 @@ package org.nextcoin.util;
 
 import java.math.BigInteger;
 
+import org.json.JSONObject;
 import org.nextcoin.node.NodesManager;
 import org.nextcoin.transactions.NxtTransaction;
 import org.nextcoin.transactions.NxtTransaction.MessagingAliasAssignmentAttachment;
@@ -40,7 +41,7 @@ public class NxtApi {
         return orgTransaction;
     }
 
-    static public NxtTransaction makeArbitraryMessageTransaction(String secret, String acctId, String message, short deadline){
+    static public NxtTransaction makeArbitraryMessageTransaction(String secret, String acctId, byte[] message, short deadline){
         byte type = NxtTransaction.TYPE_MESSAGING;
         byte subtype = NxtTransaction.SUBTYPE_MESSAGING_ARBITRARY_MESSAGE;
         //int timestamp = NxtUtil.getTimestamp() - 15;
@@ -57,7 +58,7 @@ public class NxtApi {
                 senderPublicKey, recipient, amount, fee, referencedTransaction, signature);
         
         MessagingArbitraryMessageAttachment attach = 
-                new MessagingArbitraryMessageAttachment(message.getBytes());
+                new MessagingArbitraryMessageAttachment(message);
         orgTransaction.setAttachment(attach);
         
         orgTransaction.sign(secret);
@@ -76,7 +77,7 @@ public class NxtApi {
             public void run() {
                 String base_url = "http://" + mAddr + ":7874";
                 String httpUrl = String.format(
-                        "%s/nxt?requestType=broadcastTransaction&&transactionBytes=%s", 
+                        "%s/nxt?requestType=broadcastTransaction&transactionBytes=%s", 
                         base_url, mBytes);
                 
                 try {
@@ -102,5 +103,27 @@ public class NxtApi {
                 
                 mResponseListener.onResponse(false, null);
             }}).start();
+    }
+    
+    // http://localhost:7874/nxt?requestType=getAccountPublicKey&account=
+    static public byte[] getPublicKey(String addr, String accountId){
+        String base_url = "http://" + addr + ":7874";
+        String httpUrl = String.format(
+                "%s/nxt?requestType=getAccountPublicKey&account=%s", 
+                base_url, accountId);
+
+        try {
+            String result = HttpUtil.getHttp(httpUrl);
+            JSONObject jsonObj = new JSONObject(result);
+            String hex = null;
+
+            if (!jsonObj.isNull("publicKey")){
+                hex = jsonObj.getString("publicKey");
+                return NxtUtil.convert(hex);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

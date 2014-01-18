@@ -9,6 +9,7 @@ import org.nextcoin.alias.AliasesActivity;
 import org.nextcoin.message.MessageActivity;
 import org.nextcoin.nxtclient.QRCodeParse;
 import org.nextcoin.nxtclient.R;
+import org.nextcoin.nxtclient.SafeBox;
 import org.nextcoin.transactions.SendCoinsActivity;
 import org.nextcoin.transactions.TransactionsActivity;
 
@@ -89,6 +90,23 @@ public class AccountPage {
 //        .setMessage(R.string.in_development)
 //        .setNegativeButton(R.string.back, null)
 //        .show();
+        Account account = AccountsManager.sharedInstance().getAccountList().get(pos);
+        if ( !SafeBox.sharedInstance().isUnlock(account.mId) ){
+            new AccountUnlockDialog().openUnlockDialog(mContext, account.mId, 
+                    new AccountUnlockDialog.ResponseListener() {
+                @Override
+                public void onResponse(boolean success, String info) {
+                    if ( success ){
+                        mAccountListView.notifyDataSetInvalidated();
+                    }else{
+                        Toast.makeText(mContext, info, Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }else{
+            SafeBox.sharedInstance().lock(account.mId);
+            mAccountListView.notifyDataSetInvalidated();
+        }
     }
 
     private void sendNxt(int pos){

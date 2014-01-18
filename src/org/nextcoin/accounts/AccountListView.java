@@ -3,6 +3,7 @@ package org.nextcoin.accounts;
 import java.util.LinkedList;
 
 import org.nextcoin.nxtclient.R;
+import org.nextcoin.nxtclient.SafeBox;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -99,7 +100,11 @@ public class AccountListView extends ListView{
 //                    e.printStackTrace();
 //                }
 //            }
-            
+            if ( SafeBox.sharedInstance().isUnlock(acct.mId) )
+                holder.img.setImageResource(R.drawable.unlock);
+            else
+                holder.img.setImageResource(R.drawable.lock);
+
             holder.img.setOnClickListener(mUnlockOnClickListener);
             holder.img2.setId(position);
             holder.img2.setOnClickListener(mSendOnClickListener);

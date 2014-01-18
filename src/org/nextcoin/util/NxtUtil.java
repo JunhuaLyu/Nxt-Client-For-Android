@@ -41,16 +41,16 @@ public class NxtUtil {
         return df.format(date);
     }
 
-    static public String convert(byte[] paramArrayOfByte)
-    {
-      StringBuilder localStringBuilder = new StringBuilder();
-      for (int k : paramArrayOfByte)
-      {
-        int m;
-        localStringBuilder.append("0123456789abcdefghijklmnopqrstuvwxyz".charAt((m = k & 0xFF) >> 4)).append("0123456789abcdefghijklmnopqrstuvwxyz".charAt(m & 0xF));
-      }
+    static private final String HEXS = "0123456789abcdefghijklmnopqrstuvwxyz";
+    static public String convert(byte[] paramArrayOfByte) {
+        StringBuilder localStringBuilder = new StringBuilder();
+        for (int k : paramArrayOfByte) {
+            int m = k & 0xFF;
+            localStringBuilder.append(HEXS.charAt(m >> 4));
+            localStringBuilder.append(HEXS.charAt(m & 0xF));
+        }
 
-      return localStringBuilder.toString();
+        return localStringBuilder.toString();
     }
 
     static public byte[] convert(String paramString) {

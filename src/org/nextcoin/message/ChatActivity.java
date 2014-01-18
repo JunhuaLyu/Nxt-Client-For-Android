@@ -98,7 +98,12 @@ public class ChatActivity extends Activity {
                 chatAnswer(message);
             }
         }
+        decodeMessages();
         updateUI();
+    }
+    
+    private void decodeMessages(){
+        MessagesData.decodeMessage(mMessageList, mMyAccount.mId);
     }
     
     private void updateUI(){

@@ -34,8 +34,9 @@
     <string name="back">Back</string>
     
     <string name="in_development">In development....</string>
-    <string name="unlock">Unlcok account</string>
-    <string name="unlock_msg">Unlcok account by a light client is not safe now.</string>
+    <string name="unlock">Unlcok</string>
+    <string name="unlock_account">Unlcok account</string>
+    <string name="unlock_msg">Unlcok account just for message, no forging.</string>
     <string name="node_ip">Node IP/domain</string>
     <string name="node_input_msg">The default node 121.199.12.227 is just for test. You should change to your own node.</string>
     <string name="ip_format_error">IP address format error!</string>
@@ -122,5 +123,8 @@
     <string name="send_message">Send message</string>
     <string name="encrypt_message">Encrypt message</string>
     <string name="msg_input_hint">Input message</string>
+    
+    <string name="no_publickey">Cannot get public key, this account has not making any transaction, encrypt message failed.</string>
+    <string name="unlock_account_msg">Unlock account to see encrypted message</string>
     
 </resources>

@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:gravity="center_vertical"
-            android:textColor="#000"
+            android:textColor="#f00"
             android:textSize="14dp"
             android:text="@string/encrypt_message"
             />
